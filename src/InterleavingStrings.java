@@ -27,26 +27,25 @@ public class InterleavingStrings {
 
     public boolean isInterleave2(String s1, String s2, String s3) {
         if (s1.length() + s2.length() != s3.length()) return false;
-        int[][] s1s2 = new int[s1.length() + 1][s2.length() + 1];
         boolean[][] visited = new boolean[s1.length() + 1][s2.length() + 1];
-        traverse(s1, s2, s3, 0, 0, 0, s1s2, visited);
-        return s1s2[s1.length()][s2.length()] == 1;
+        traverse(s1, s2, s3, 0, 0, 0, visited);
+        return visited[s1.length()][s2.length()];
     }
 
-    public void traverse(String s1, String s2, String s3, int p1, int p2, int p3, int[][] s1s2, boolean[][] visited) {
+    public void traverse(String s1, String s2, String s3, int p1, int p2, int p3,  boolean[][] visited) {
         if (visited[p1][p2]) return;
         visited[p1][p2] = true;
 
         if (p3 == s3.length()) {
-            s1s2[p1][p2] = 1;
+            
             return;
         }
 
         if (p1 < s1.length() && s1.charAt(p1) == s3.charAt(p3)) {
-            traverse(s1, s2, s3, p1 + 1, p2, p3 + 1, s1s2, visited);
+            traverse(s1, s2, s3, p1 + 1, p2, p3 + 1,  visited);
         }
         if (p2 < s2.length() && s2.charAt(p2) == s3.charAt(p3)) {
-            traverse(s1, s2, s3, p1, p2 + 1, p3 + 1, s1s2, visited);
+            traverse(s1, s2, s3, p1, p2 + 1, p3 + 1,  visited);
         }
     }
 
