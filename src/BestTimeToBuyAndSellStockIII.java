@@ -18,15 +18,23 @@ public class BestTimeToBuyAndSellStockIII {
                         current2 = price2;
                     } else if (price2 - current2 > 0) {
                         rightProfit[i] = price2 - current2;
+
                     }
                 }
             }
         }
+
         int max=0;
         for (int i = 0; i < rightProfit.length; i++) {
             max=Math.max(max,rightProfit[i]+leftProfit[i]);
 
         }
         return max;
+
+    }
+
+    public static void main(String[] args) {
+        BestTimeToBuyAndSellStockIII solution = new BestTimeToBuyAndSellStockIII();
+        solution.maxProfit(new int[]{3,3,5,0,0,3,1,4});
     }
 }
