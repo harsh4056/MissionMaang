@@ -3,65 +3,50 @@ import java.util.List;
 
 public class SpiralMatrix {
     public List<Integer> spiralOrder(int[][] matrix) {
+        List<Integer> list = new ArrayList<>();
+        if (matrix == null || matrix.length == 0) return list;
 
-        int i = 0;
-        int j = 0;
-        int startRow=0;
-        int startColumn=0;
-        int rowsLength=matrix.length-1;
-        int columnsLength= matrix[0].length-1;
-        int mainCount=(matrix[0].length)* (matrix.length);
-        List<Integer> list= new ArrayList<>();
-        while(mainCount>0){
+        int verticalStart   = 0;
+        int verticalEnd     = matrix.length;
+        int horizontalStart = 0;
+        int horizontalEnd   = matrix[0].length;
 
-            i=startColumn;
-            for (j = startColumn; j <=columnsLength; j++) {
-                int value=matrix[i][j];
-                list.add(value);
-                mainCount--;
+        while (horizontalStart < horizontalEnd
+                && verticalStart   < verticalEnd) {
+
+            // 1) top row, left→right
+            for (int col = horizontalStart; col < horizontalEnd; col++) {
+                list.add(matrix[verticalStart][col]);
             }
-            if(mainCount==0){
-                break;
+            verticalStart++;
+
+            // 2) right column, top→bottom
+            for (int row = verticalStart; row < verticalEnd; row++) {
+                list.add(matrix[row][horizontalEnd - 1]);
+            }
+            horizontalEnd--;
+
+            // 3) bottom row, right→left (if still valid)
+            if (verticalStart < verticalEnd) {
+                for (int col = horizontalEnd - 1; col >= horizontalStart; col--) {
+                    list.add(matrix[verticalEnd - 1][col]);
+                }
+                verticalEnd--;
             }
 
-            startRow++;
-            j=columnsLength;
-            for (i=startRow; i <=rowsLength; i++) {
-                int value=matrix[i][j];
-                list.add(value);
-                mainCount--;
+            // 4) left column, bottom→top (if still valid)
+            if (horizontalStart < horizontalEnd) {
+                for (int row = verticalEnd - 1; row >= verticalStart; row--) {
+                    list.add(matrix[row][horizontalStart]);
+                }
+                horizontalStart++;
             }
-            if(mainCount==0){
-                break;
-            }
-            columnsLength--;
-            i=rowsLength;
-            for (j = columnsLength; j >=startColumn; j--) {
-                int value=matrix[i][j];
-                list.add(value);
-                mainCount--;
-            }
-            if(mainCount==0){
-                break;
-            }
-            j=startColumn;
-            rowsLength--;
-            for(i=rowsLength;i>=startRow;i--){
-                int value=matrix[i][j];
-                list.add(value);
-                mainCount--;
-            }
-            if(mainCount==0){
-                break;
-            }
-            startColumn++;
-
-
         }
 
         return list;
     }
-/*
+
+    /*
 *
 * public List<Integer> spiralOrder(int[][] matrix) {
     List<Integer> result = new ArrayList<>();
@@ -107,15 +92,48 @@ public class SpiralMatrix {
 
 * */
     public static void main(String[] args) {
-        int[][] matrix = {
-                {1,  2,  3,  4},
-                {5,  6,  7,  8},
-                {9, 10, 11, 12},
-                {13,14, 15, 16}
+        int[][] matrix5 = {
+                { 1,  2,  3,  4,  5},
+                { 6,  7,  8,  9, 10},
+                {11, 12, 13, 14, 15},
+                {16, 17, 18, 19, 20},
+                {21, 22, 23, 24, 25}
+        };
+        int[][] matrix6 = {
+                { 1,  2,  3,  4,  5,  6},
+                { 7,  8,  9, 10, 11, 12},
+                {13, 14, 15, 16, 17, 18},
+                {19, 20, 21, 22, 23, 24},
+                {25, 26, 27, 28, 29, 30},
+                {31, 32, 33, 34, 35, 36}
+        };
+// 8×8 matrix
+        int[][] matrix8 = {
+                { 1,  2,  3,  4,  5,  6,  7,  8},
+                { 9, 10, 11, 12, 13, 14, 15, 16},
+                {17, 18, 19, 20, 21, 22, 23, 24},
+                {25, 26, 27, 28, 29, 30, 31, 32},
+                {33, 34, 35, 36, 37, 38, 39, 40},
+                {41, 42, 43, 44, 45, 46, 47, 48},
+                {49, 50, 51, 52, 53, 54, 55, 56},
+                {57, 58, 59, 60, 61, 62, 63, 64}
         };
 
+// 9×9 matrix
+        int[][] matrix9 = {
+                {  1,  2,  3,  4,  5,  6,  7,  8,  9},
+                { 10, 11, 12, 13, 14, 15, 16, 17, 18},
+                { 19, 20, 21, 22, 23, 24, 25, 26, 27},
+                { 28, 29, 30, 31, 32, 33, 34, 35, 36},
+                { 37, 38, 39, 40, 41, 42, 43, 44, 45},
+                { 46, 47, 48, 49, 50, 51, 52, 53, 54},
+                { 55, 56, 57, 58, 59, 60, 61, 62, 63},
+                { 64, 65, 66, 67, 68, 69, 70, 71, 72},
+                { 73, 74, 75, 76, 77, 78, 79, 80, 81}
+        };
 
         SpiralMatrix spiralMatrix= new SpiralMatrix();
-        spiralMatrix.spiralOrder(matrix);
+        System.out.println(
+        spiralMatrix.spiralOrder(matrix8));
     }
 }
