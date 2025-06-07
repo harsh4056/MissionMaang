@@ -5,29 +5,36 @@ public class FindAllAnagramsInAString {
 
 
     public List<Integer> findAnagrams(String s, String p) {
-        int []pHold= new int[26];
-        List<Integer> anagramPosition= new ArrayList<>();
-        for (int i = 0; i < p.length(); i++) {
-            pHold[p.charAt(i)-'a']++;
-        }
 
-        for (int i = 0; i <= s.length() - p.length(); i++) {
-            int []sHold= new int[26];
-            for (int j = i; j < i+p.length(); j++) {
-                sHold[s.charAt(j)-'a']++;
-            }
-            boolean valid=true;
-            for (int j = 0; j <26 ; j++) {
-                if (pHold[j] != sHold[j]) {
-                    valid = false;
-                    break;
-                }
-            }
-            if(valid){
-                anagramPosition.add(i);
+
+        List<Integer> result= new ArrayList<>();
+        char[]sArr= s.toCharArray();
+        char[]pArr=p.toCharArray();
+        int[]maps= new int[26];
+        int n=sArr.length;
+        int k =pArr.length;
+
+        if (n < k) return result;
+        for (int i = 0; i < k; i++) {
+            maps[pArr[i]-'a']++;
+            maps[sArr[i]-'a']--;
+        }
+        int diffCount = 0;
+        for (int f : maps) {
+            if (f > 0) {
+                diffCount++;
             }
         }
-        return anagramPosition;
+        if(diffCount==0)
+            result.add(0);
+
+        for (int i = k; i <n ; i++) {
+            if(++maps[sArr[i-k]-'a']==1) diffCount++;
+            if(--maps[sArr[i]-'a']==0) diffCount--;
+            if(diffCount==0)
+                result.add(i-k+1);
+        }
+        return result;
 
 
     }
