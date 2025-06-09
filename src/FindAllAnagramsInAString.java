@@ -44,8 +44,8 @@ public class FindAllAnagramsInAString {
 
 
 
-        String s2 = "abab";
-        String p2 = "ab";
+        String s2 = "pqrabcbcaabc";
+        String p2 = "abc";
         printList(finder.findAnagrams(s2, p2));
 
         String s3 = "afdgzyxksldfm";
