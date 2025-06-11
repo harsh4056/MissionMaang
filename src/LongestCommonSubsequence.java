@@ -1,38 +1,87 @@
 import java.lang.foreign.StructLayout;
+import java.util.Arrays;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class LongestCommonSubsequence {
 
 
     public int longestCommonSubsequence(String text1, String text2) {
-        if(text2.length()>text1.length()){
-           return longestCommonSubsequence(text2,text1);
+      int [][]memo= new int[text1.length()][text2.length()];
+        for (int[] ints : memo) {
+            Arrays.fill(ints,-1);
+        }
+       return lcs(text1,text2,0,0,memo);
+    }
+
+
+    int lcs(String text1, String text2, int i, int j, int[][] memo){
+        if (i >= text1.length() || j >= text2.length()) return 0;
+
+        if (memo[i][j] != -1) return memo[i][j];
+
+        if (text1.charAt(i) == text2.charAt(j)) {
+            memo[i][j] = 1 + lcs(text1, text2, i + 1, j + 1, memo);
+        } else {
+            memo[i][j] = Math.max(
+                    lcs(text1, text2, i + 1, j, memo),
+                    lcs(text1, text2, i, j + 1, memo)
+            );
         }
 
-        int p1=0;
-        int p2=0;
-        for (int i = 0; i < text1.length(); i++) {
-            if(text1.charAt(p1)==text2.charAt(p2)){
-                p2++;
-            }
-            if(p2>=text2.length()){
-                return text2.length();
-            }
-            p1++;
+        return memo[i][j];
+
+    }
+    public int longestCommonSubsequence2(String text1, String text2) {
+
+        int n=text1.length();
+        int m=text2.length();
+        int [][]memo= new int[n][m];
+        if(text1.charAt(0)==text2.charAt(0)){
+            memo[0][0]=1;
         }
-        return p2;
+        for (int i = 1; i < n; i++) {
+            memo[i][0]=text1.charAt(i)==text2.charAt(0) ? 1 : memo[i - 1][0];
+
+        }
+        for (int j = 1; j < m; j++) {
+            memo[0][j]=text1.charAt(0)==text2.charAt(j) ? 1 : memo[0][j-1];
+        }
+
+        for (int i = 1; i < n; i++) {
+            for (int j = 1; j < m; j++) {
+               if(text1.charAt(i)==text2.charAt(j)){
+                   memo[i][j]=1+memo[i-1][j-1];
+               }
+               else{
+                   memo[i][j]=Math.max(memo[i][j-1],memo[i-1][j]);
+               }
+            }
+        }
+        return memo[n-1][m-1];
+        
+
     }
 
 
     public static void main(String[] args) {
-        LongestCommonSubsequence commonSubsequence = new LongestCommonSubsequence();
+        int n = 500;
+        String a = rand(n), b = rand(n);
+        LongestCommonSubsequence sol = new LongestCommonSubsequence();
 
-       /* System.out.println(commonSubsequence.longestCommonSubsequence("abcde", "ace")); // Expected: 3
-        System.out.println(commonSubsequence.longestCommonSubsequence("abc", "abc"));   // Expected: 3
-        System.out.println(commonSubsequence.longestCommonSubsequence("abc", "def"));   // Expected: 0
-        System.out.println(commonSubsequence.longestCommonSubsequence("abcdef", "acf")); // Expected: 3*/
+        long t1 = System.nanoTime();
+        sol.longestCommonSubsequence(a, b);
+        System.out.printf("Top-down:    %.2f ms%n", (System.nanoTime()-t1)/1e6);
 
-        System.out.println(commonSubsequence.longestCommonSubsequence("psnw", "vozsh"));  // Expected: 2
+        long t2 = System.nanoTime();
+        sol.longestCommonSubsequence2(a, b);
+        System.out.printf("Bottom-up:   %.2f ms%n", (System.nanoTime()-t2)/1e6);
     }
 
+    private static String rand(int len) {
+        ThreadLocalRandom r = ThreadLocalRandom.current();
+        char[] buf = new char[len];
+        for (int i = 0; i < len; i++) buf[i] = (char)('a' + r.nextInt(26));
+        return new String(buf);
+    }
 
 }
