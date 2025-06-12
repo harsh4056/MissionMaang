@@ -12,7 +12,7 @@ public class LowestCommonAncestorBinarySearchTree {
             return lowestCommonAncestor(root.left,p,q);
         }
         else {
-                return lowestCommonAncestor(root.right,p,q);
+            return lowestCommonAncestor(root.right,p,q);
 
         }
 
