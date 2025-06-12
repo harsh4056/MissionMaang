@@ -3,38 +3,50 @@ import java.util.Stack;
 public class RemoveKDigits {
 
     public String removeKdigits(String num, int k) {
-        Stack<Character> stack = new Stack<>();
-
-        for (int i = 0; i < num.length(); i++) {
-            char digit = num.charAt(i);
-            while (!stack.isEmpty() && stack.peek() > digit && k > 0) {
-                stack.pop();
+        int top=-1;
+      char []nums= num.toCharArray();
+        for (int i = 0; i < nums.length; i++) {
+            while(top>=0 && nums[top]>nums[i] && k>0){
+                top--;
                 k--;
             }
-            stack.push(digit);
+
+            nums[++top]=nums[i];
+        }
+        while (k > 0) {
+            top--;
+            k--;
+        }
+        int i = 0;
+        while (i <=top && nums[i] == '0') i++;
+        if (i > top) return "0";
+        return String.valueOf(nums, i, top - i + 1);
+
+    }
+    public String removeKdigits2(String num, int k) {
+        StringBuilder stack = new StringBuilder();
+
+        for (char digit : num.toCharArray()) {
+            while (!stack.isEmpty() && stack.charAt(stack.length() - 1) > digit && k > 0) {
+                stack.deleteCharAt(stack.length() - 1);  // pop
+                k--;
+            }
+            stack.append(digit);  // push
         }
 
-        // Remove from end if k still > 0
+        // Remove remaining from end
         while (k > 0) {
-            stack.pop();
+            stack.deleteCharAt(stack.length() - 1);
             k--;
         }
 
-        // Build result efficiently
-        StringBuilder answer = new StringBuilder();
-        while (!stack.isEmpty()) {
-            answer.append(stack.pop());
-        }
-        answer.reverse(); // reverse after popping from stack
-
         // Remove leading zeros
-        while (!answer.isEmpty() && answer.charAt(0) == '0') {
-            answer.deleteCharAt(0);
-        }
+        int i = 0;
+        while (i < stack.length() && stack.charAt(i) == '0') i++;
 
-        return answer.isEmpty() ? "0" : answer.toString();
+        String result = stack.substring(i);
+        return result.isEmpty() ? "0" : result;
     }
-
 
 
     public static void main(String[] args) {
