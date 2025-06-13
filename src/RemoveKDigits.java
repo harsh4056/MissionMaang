@@ -13,6 +13,7 @@ public class RemoveKDigits {
 
             nums[++top]=nums[i];
         }
+
         while (k > 0) {
             top--;
             k--;

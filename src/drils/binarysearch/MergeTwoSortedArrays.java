@@ -1,4 +1,4 @@
-package drils;
+package drils.binarysearch;
 
 public class MergeTwoSortedArrays {
     public int[] merge(int[] nums1, int[] nums2) {

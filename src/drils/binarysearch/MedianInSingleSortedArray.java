@@ -1,4 +1,4 @@
-package drils;
+package drils.binarysearch;
 
 public class MedianInSingleSortedArray {
     public double medianInArray(int[]nums){

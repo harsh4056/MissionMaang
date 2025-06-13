@@ -1,10 +1,15 @@
+package drils.montonicstack;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
-import java.util.HashSet;
 
-public class LargestRectangleInHistogram {
+public class MaximalSquare {
 
-    public int largestRectangleArea(int[] heights) {
+
+
+
+
+    public int maximalSquare(int[] heights) {
         int n = heights.length;
         int[] prevSmaller = new int[n], nextSmaller = new int[n];
         Deque<Integer> st = new ArrayDeque<>();
@@ -33,22 +38,23 @@ public class LargestRectangleInHistogram {
         for (int i = 0; i < n; i++) {
             int width = nextSmaller[i] - prevSmaller[i] - 1;
 
-            int area = heights[i] * width;
+            int side = Math.min(heights[i],width);
+            int area=side*side;
             if (area > maxArea) maxArea = area;
         }
         return maxArea;
     }
     public static void main(String[] args) {
-        LargestRectangleInHistogram solution = new LargestRectangleInHistogram();
+        MaximalSquare sd = new MaximalSquare();
 
-        int[] heights1 = {1, 1, 1, 1};
-        System.out.println(solution.largestRectangleArea(heights1)); // Expected: 12
+        System.out.println(sd.maximalSquare(new int[]{2, 1, 5, 6, 2, 3}));
+        // Expected: 4
 
-        int[] heights2 = {2,4};
-        System.out.println(solution.largestRectangleArea(heights2)); // Expected: 4
+        System.out.println(sd.maximalSquare(new int[]{1, 1, 1, 1}));
+        // Expected: 1
 
-        int[] heights3 = {6,2,5,4,5,1,6};
-        System.out.println(solution.largestRectangleArea(heights3)); // Expected: 12
+        System.out.println(sd.maximalSquare(new int[]{5, 4, 3, 2, 1}));
+        // Expected: 9
     }
 
 }
