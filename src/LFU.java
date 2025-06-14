@@ -1,60 +1,101 @@
+import java.util.*;
+
 class LFUCache {
-    int capacity=0;
-    int size=0;
-    LinkedListCache head=null;
-    LinkedListCache tail=null;
 
-    public LFUCache(int capacity) {
+    class Node {
+        int key, value, freq;
+        Node prev, next;
 
-    }
-
-    public int get(int key) {
-        return 0;
-    }
-
-    public void put(int key, int value) {
-
-    }
-
-
-
-
-    class LinkedListCache {
-        int key=0;
-        int value=0;
-        LinkedListCache next;
-        LinkedListCache prev;
-
-        public LinkedListCache(int key, int value, LinkedListCache next, LinkedListCache prev) {
+        Node(int key, int value) {
             this.key = key;
             this.value = value;
-            this.next = next;
-            this.prev = prev;
+            this.freq = 1;
         }
     }
 
-    // Always add node right after head
-    private void addToFront(LinkedListCache node) {
-        node.prev = head;
-        node.next = head.next;
-        head.next.prev = node;
-        head.next = node;
+    class DLL {
+        Node head, tail;
+        int size;
+
+        DLL() {
+            head = new Node(0, 0); // dummy head
+            tail = new Node(0, 0); // dummy tail
+            head.next = tail;
+            tail.prev = head;
+        }
+
+        void addToHead(Node node) {
+            node.next = head.next;
+            node.prev = head;
+            head.next.prev = node;
+            head.next = node;
+            size++;
+        }
+
+        void remove(Node node) {
+            node.prev.next = node.next;
+            node.next.prev = node.prev;
+            size--;
+        }
+
+        Node removeTail() {
+            if (size == 0) return null;
+            Node node = tail.prev;
+            remove(node);
+            return node;
+        }
     }
 
-    // Remove an existing node
-    private void removeNode(LinkedListCache node) {
-        node.prev.next = node.next;
-        node.next.prev = node.prev;
+    int capacity, size, minFreq;
+    Map<Integer, Node> keyNodeMap = new HashMap<>();
+    Map<Integer, DLL> freqMap = new HashMap<>();
+
+    public LFUCache(int capacity) {
+        this.capacity = capacity;
+        this.size = 0;
+        this.minFreq = 0;
     }
 
-    // Move an existing node to the front
-    private void moveToFront(LinkedListCache node) {
-        removeNode(node);
-        addToFront(node);
+    public int get(int key) {
+        if (!keyNodeMap.containsKey(key)) return -1;
+        Node node = keyNodeMap.get(key);
+        update(node);
+        return node.value;
     }
 
+    public void put(int key, int value) {
+        if (capacity == 0) return;
 
+        if (keyNodeMap.containsKey(key)) {
+            Node node = keyNodeMap.get(key);
+            node.value = value;
+            update(node);
+        } else {
+            if (size == capacity) {
+                DLL minFreqList = freqMap.get(minFreq);
+                Node toRemove = minFreqList.removeTail();
+                keyNodeMap.remove(toRemove.key);
+                size--;
+            }
 
+            Node newNode = new Node(key, value);
+            keyNodeMap.put(key, newNode);
+            freqMap.computeIfAbsent(1, z -> new DLL()).addToHead(newNode);
+            minFreq = 1;
+            size++;
+        }
+    }
 
+    private void update(Node node) {
+        int oldFreq = node.freq;
+        DLL oldList = freqMap.get(oldFreq);
+        oldList.remove(node);
 
+        if (oldFreq == minFreq && oldList.size == 0) {
+            minFreq++;
+        }
+
+        node.freq++;
+        freqMap.computeIfAbsent(node.freq, z -> new DLL()).addToHead(node);
+    }
 }
