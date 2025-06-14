@@ -1,12 +1,11 @@
 import java.util.HashMap;
 
-public class SubarraySumEqualsK {
+public class SubarrayProductLessThanK {
 
-    public int subarraySum(int[] nums, int k) {
-
+    public int numSubarrayProductLessThanK(int[] nums, int k) {
         HashMap<Integer,Integer> map= new HashMap<>();
 
-        int sum=0;
+        int sum=1;
         int count=0;
         map.put(0,1);
         for (int num : nums) {
@@ -18,13 +17,5 @@ public class SubarraySumEqualsK {
 
         }
         return count;
-
-    }
-
-
-
-    public static void main(String[] args) {
-        SubarraySumEqualsK subarraySumEqualsK= new SubarraySumEqualsK();
-        subarraySumEqualsK.subarraySum(new int[]{1,2,3},3);
     }
 }
