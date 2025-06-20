@@ -9,50 +9,31 @@ public class DifferenceOfTwoArrays {
 
        int[] numsRecord1=new int[2001];
        int[] numsRecord2=new int[2001];
+
         for (int i : nums1) {
-            if(i<0){
-                numsRecord1[i+2001]+=1;
+            numsRecord1[i+1000]++;
+        }
+        for (int i : nums2) {
+            numsRecord2[i+1000]++;
+        }
+        List<Integer> list1= new ArrayList<>();
+        for (int i : nums1) {
+            if(numsRecord2[i+1000]==0){
+            list1.add(i);
             }
-            else{
-                numsRecord1[i]+=1;
+            numsRecord2[i+1000]++;
+        }
+        List<Integer> list2= new ArrayList<>();
+        for (int i : nums2) {
+            if(numsRecord1[i+1000]==0){
+                list2.add(i);
             }
+            numsRecord1[i+1000]++;
         }
 
-        for (int i : nums2) {
-            if(i<0){
-                numsRecord2[i+2001]+=1;
-            }
-            else{
-                numsRecord2[i]+=1;
-            }
-        }
-        HashSet<Integer> numbers1= new HashSet<>();
-        for (int i : nums1) {
-            if(i<0){
-                 if(numsRecord1[i+2001]>=1 && numsRecord2[i+2001]==0){
-                     numbers1.add(i);
-                 }
-            }
-            else{
-                if(numsRecord1[i]>=1 && numsRecord2[i]==0)
-                    numbers1.add(i);
-            }
-        }
-        HashSet<Integer> numbers2= new HashSet<>();
-        for (int i : nums2) {
-            if(i<0){
-                if(numsRecord2[i+2001]>=1 && numsRecord1[i+2001]==0){
-                    numbers2.add(i);
-                }
-            }
-            else{
-                if(numsRecord2[i]>=1 && numsRecord1[i]==0)
-                    numbers2.add(i);
-            }
-        }
         List<List<Integer>> arrayLists= new ArrayList<>();
-        arrayLists.add(numbers1.stream().toList());
-        arrayLists.add(numbers2.stream().toList());
+        arrayLists.add(list1);
+        arrayLists.add(list2);
         return  arrayLists;
     }
     public static void main(String[] args) {
@@ -71,7 +52,17 @@ public class DifferenceOfTwoArrays {
         result = solver.findDifference(nums3, nums4);
         System.out.println("Test Case 2:");
         printResult(result);
+
+        int[] nums5 = {1, 2, 2};
+        int[] nums6 = {3};
+
+        result = solver.findDifference(nums5, nums6);
+        System.out.println("Test Case 3:");
+        printResult(result);
     }
+
+
+
 
     private static void printResult(List<List<Integer>> result) {
         for (List<Integer> list : result) {
