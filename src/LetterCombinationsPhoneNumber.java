@@ -5,35 +5,27 @@ import java.util.List;
 public class LetterCombinationsPhoneNumber {
 
     List<String> answer;
-    HashMap<Character, String> digitLetter;
+
     public List<String> letterCombinations(String digits) {
         if(digits.isEmpty())
             return answer;
         answer=new ArrayList<>();
-        digitLetter = new HashMap<>();
-        digitLetter.put('2', "abc");
-        digitLetter.put('3', "def");
-        digitLetter.put('4', "ghi");
-        digitLetter.put('5', "jkl");
-        digitLetter.put('6', "mno");
-        digitLetter.put('7', "pqrs");
-        digitLetter.put('8', "tuv");
-        digitLetter.put('9', "wxyz");
-        combinate(new StringBuilder(),digits.toCharArray(),0);
+        String[] mapping =new String[]{"","","abc","def","ghi","jkl","mno","pqrs","tuv","wzyz"};
+        combinate(new StringBuilder(),digits.toCharArray(),0,mapping);
         return answer;
 
     }
 
-    public void combinate(StringBuilder combo ,char[] digits,int start){
+    public void combinate(StringBuilder combo ,char[] digits,int start,String[] mapping){
 
         if(digits.length== combo.length()){
             answer.add(combo.toString());
             return;
 
         }
-            for (int j = 0; j <digitLetter.get(digits[start]).length(); j++) {
-                combo.append(digitLetter.get(digits[start]).charAt(j));
-                combinate(combo,digits,start+1);
+            for (int j = 0; j <mapping[digits[start]-'0'].length(); j++) {
+                combo.append(mapping[digits[start]-'0'].charAt(j));
+                combinate(combo,digits,start+1,mapping);
                 combo.deleteCharAt(combo.length()-1);
             }
 
