@@ -64,17 +64,16 @@ public class LongestCommonSubsequence {
 
 
     public static void main(String[] args) {
-        int n = 500;
-        String a = rand(n), b = rand(n);
+
+
         LongestCommonSubsequence sol = new LongestCommonSubsequence();
 
-        long t1 = System.nanoTime();
-        sol.longestCommonSubsequence(a, b);
-        System.out.printf("Top-down:    %.2f ms%n", (System.nanoTime()-t1)/1e6);
 
-        long t2 = System.nanoTime();
-        sol.longestCommonSubsequence2(a, b);
-        System.out.printf("Bottom-up:   %.2f ms%n", (System.nanoTime()-t2)/1e6);
+        System.out.println(sol.longestCommonSubsequence("geek","eke"));
+
+
+
+
     }
 
     private static String rand(int len) {
