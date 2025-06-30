@@ -7,24 +7,49 @@ public class WordBreak {
     public boolean wordBreak(String s, List<String> wordDict) {
         HashSet<String> wordDictHashSet = new HashSet<>(wordDict);
         Boolean[] memo = new Boolean[s.length()];
-        return checkWord(s, 0, wordDictHashSet, memo);
+        boolean ans= checkWord(s, 0, wordDictHashSet, memo);
+        return ans;
+        //return dfs( 0, s,wordDictHashSet);
     }
 
     public boolean checkWord(String s, int position, HashSet<String> wordDict, Boolean[] memo) {
-        if (position == s.length()) return true;
-        if (memo[position] != null) return memo[position];
 
-        for (int i = position; i < s.length(); i++) {
-            String sub = s.substring(position, i + 1);
-            if (wordDict.contains(sub)) {
-                if (checkWord(s, i + 1, wordDict, memo)) {
-                    memo[position] = true;
-                    return true;
-                }
+
+        if(position>s.length()){
+            return false;
+        }
+        if(position==s.length()){
+            return true;
+        }
+        if(memo[position]!=null) {
+            return  memo[position];
+        }
+        boolean ans=false;
+        for (int j = position+1; j <=s.length() ; j++) {
+            String word=s.substring(position,j);
+
+            ans = wordDict.contains(word) && checkWord(s,j,wordDict,memo);
+            memo[position]=ans;
+            if(ans){
+                return true;
+            }
+
+        }
+        return ans;
+    }
+    boolean dfs(int i, String s, HashSet<String> dict){
+        if(i>s.length()){
+            return false;
+        }
+        if(i==s.length()){
+            return true;
+        }
+        for (int j = i+1; j <=s.length() ; j++) {
+            String word=s.substring(i,j);
+            if(dict.contains(word) && dfs(j,s,dict)){
+                return true;
             }
         }
-
-        memo[position] = false;
         return false;
     }
 
@@ -32,8 +57,8 @@ public class WordBreak {
         WordBreak wb = new WordBreak();
 
         List<TestCase> tests = List.of(
-                new TestCase("leetcode", List.of("leet", "code")),
-                new TestCase("applepenapple", List.of("apple", "pen")),
+                new TestCase("leetcode", List.of("leet", "code"))
+                ,new TestCase("applepenapple", List.of("apple", "pen")),
                 new TestCase("catsandog", List.of("cats", "dog", "sand", "and", "cat")),
                 new TestCase("aaaaaaa", List.of("aaaa", "aaa")),
                 new TestCase("abcd", List.of("a", "abc", "b", "cd"))

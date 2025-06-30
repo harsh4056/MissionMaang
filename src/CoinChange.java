@@ -1,4 +1,6 @@
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class CoinChange {
 
@@ -26,9 +28,38 @@ public class CoinChange {
 
     }
 
+    public int coinChange2(int[] coins, int amount) {
+
+        int []memo = new int[amount+1];
+        Arrays.fill(memo,-1);
+
+        int ans=dfs(coins, amount, memo);
+        return ans;
+
+    }
+
+    public int dfs(int[]coins,int amount,int[]memo){
+        if (amount == 0) return 0;
+        if (amount < 0) return Integer.MAX_VALUE;
+        if (memo[amount] != -1) return memo[amount];
+
+        int min = Integer.MAX_VALUE;
+        for (int coin : coins) {
+            int res = dfs(coins, amount - coin, memo);
+            if (res != Integer.MAX_VALUE) {
+                min = Math.min(min, 1 + res);
+            }
+        }
+
+        memo[amount] = min;
+        return min;
+    }
+
+
+
     public static void main(String[] args) {
         CoinChange  coinChange= new CoinChange();
-        System.out.println(coinChange.coinChange(new int[]{1},1));
+        System.out.println(coinChange.coinChange2(new int[]{1,2,5},10000));
     }
 
 
