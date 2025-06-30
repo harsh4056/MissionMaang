@@ -16,6 +16,7 @@ public class CombinationSumII {
             return;
         }if(target==0){
             set.add(new ArrayList<>(list));
+            return;
         }
 
         for (int j = i; j < candidates.length; j++) {
