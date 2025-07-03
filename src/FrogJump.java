@@ -1,41 +1,47 @@
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class FrogJump {
 
     public boolean canCross(int[] stones) {
 
-        HashSet<Integer> stonesSet= new HashSet<>();
-        for (Integer integer : stones) {
-            stonesSet.add(integer);
-        }
+        HashMap<Integer,Integer> stonesMap= new HashMap<>();
+        for (int i = 0; i < stones.length; i++) {
+            stonesMap.put(stones[i],i);
 
-        int[][]memo= new int[stones.length][stones.length];
+        }
+        boolean[][]memo= new boolean[stones.length][stones.length];
+        memo[0][0]=true;
         for (int i = 0; i < memo.length; i++) {
 
             for (int j = 0; j < memo[0].length; j++) {
-
+                if(memo[i][j]){
+                    int val1=stones[i]+j-1;
+                    int val2=stones[i]+j;
+                    int val3=stones[i]+j+1;
+                    if(stonesMap.containsKey(val1)){
+                        memo[stonesMap.get(val1)][j-1]=true;
+                    }
+                    if(stonesMap.containsKey(val2)){
+                        memo[stonesMap.get(val2)][j]=true;
+                    }
+                    if(stonesMap.containsKey(val3)){
+                        memo[stonesMap.get(val3)][j+1]=true;
+                    }
+                }
                 
             }
         }
 
-        return solveCross(stonesSet, 0,0,stones[stones.length-1]);
-        //return true;
+        for (int i = 0; i < memo[0].length; i++) {
+            if(memo[stones.length-1][i]){
+                return true;
+            }
+        }
+        return false;
     }
 
-    public boolean solveCross(HashSet<Integer> set, int value,int jump, int lastValue){
-        if (value == lastValue) {
-            return true;
-        }
-            if(set.contains(value)) {
-                set.remove(value);
-                for (int i = jump - 1; i <= jump + 1; i++) {
-                    if (solveCross(set, value+i,i, lastValue))
-                        return true;
-                }
-                set.add(value);
-            }
-            return false;
-    }
+
 
    /* public boolean solveCross(HashSet<Integer> set, int value, int jump, int lastValue){
         if(value==lastValue){
