@@ -1,6 +1,6 @@
 import java.util.HashMap;
 import java.util.HashSet;
-
+//Hard Problem
 public class FrogJump {
 
     public boolean canCross(int[] stones) {
@@ -19,7 +19,11 @@ public class FrogJump {
                     int val1=stones[i]+j-1;
                     int val2=stones[i]+j;
                     int val3=stones[i]+j+1;
+                    if(val1== stones[stones.length-1]||val2== stones[stones.length-1]||val3== stones[stones.length-1]){
+                        return true;
+                    }
                     if(stonesMap.containsKey(val1)){
+
                         memo[stonesMap.get(val1)][j-1]=true;
                     }
                     if(stonesMap.containsKey(val2)){
@@ -30,12 +34,6 @@ public class FrogJump {
                     }
                 }
                 
-            }
-        }
-
-        for (int i = 0; i < memo[0].length; i++) {
-            if(memo[stones.length-1][i]){
-                return true;
             }
         }
         return false;
