@@ -7,26 +7,28 @@ public class PartitionEqualSubsetSum {
     public static boolean canPartition(int[] nums) {
         int total = Arrays.stream(nums).sum();
         if (total % 2 != 0) return false;
-        int target = total / 2;
-        Map<String, Boolean> memo = new HashMap<>();
-        boolean answer= canPartitionHelper(nums, 0, target, memo);
-        return answer;
+        total=total/2;
+        Boolean[][]dp= new Boolean[nums.length][total+1];
+        return find(total,nums,nums.length-1,dp);
     }
 
-    private static boolean canPartitionHelper(int[] nums, int index, int target, Map<String, Boolean> memo) {
-        if (target == 0) return true;
-        if (index >= nums.length || target < 0) return false;
 
-        String key = index + "," + target;
-        if (memo.containsKey(key)) return memo.get(key);
-
-        boolean include = canPartitionHelper(nums, index + 1, target - nums[index], memo);
-        boolean exclude = canPartitionHelper(nums, index + 1, target, memo);
-
-        boolean result = include || exclude;
-        memo.put(key, result);
-        return result;
+public static boolean find(int target, int[] arr, int index, Boolean[][] dp){
+    if(target<0){
+        return false;
     }
+    if(index<0){
+        return target==0;
+    }
+    if(dp[index][target]!=null) return dp[index][target];
+    if(find(target-arr[index], arr,index-1,dp)||find(target, arr,index-1,dp)){
+
+        return true;
+    }
+    dp[index][target]=false;
+    return false;
+}
+
 
     public static boolean canPartition2(int[] nums) {
 

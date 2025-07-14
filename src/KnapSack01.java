@@ -3,48 +3,49 @@ import java.util.Arrays;
 public class KnapSack01 {
 
     int knapsack(int[] weights, int[] values, int W){
-        int[]memo= new int[W+1];
-        Arrays.fill(memo,-1);
-        dfs(weights,values,W,memo,0,0);
-        return memo[0];
-    }
-    int dfs(int[] weights, int[] values, int W,int []memo,int i,int j){
+            int[][]memo= new int[W+1][values.length+1];
+        for (int[] ints : memo) {
+            Arrays.fill(ints,-1);
+        }
 
-        if(W<0){
-            return Integer.MIN_VALUE;
+        int ans= maxValue(weights,values,weights.length-1,W,memo);
+        return ans;
+
+    }
+
+    static int maxValue(int[] weight, int[] value, int index, int maxWeight, int[][] memo){
+        if(index==0){
+            if(weight[index]<=maxWeight)
+                return value[index];
+            else return 0;
         }
-        if(W==0){
-            return 0;
+
+        if(memo[maxWeight][index]!=-1) {
+            return memo[maxWeight][index];
         }
-        if(memo[i]!=-1) return memo[i];
-        int max=-1;
-        for (int k = j, weightsLength = weights.length; k < weightsLength; k++) {
-            int weight = weights[k];
-            int profit = dfs(weights, values, W - weight, memo, i + 1,j+1);
-            max = Math.max(max, values[j]+profit);
+        int take=Integer.MIN_VALUE;
+        if(weight[index]<=maxWeight) {
+            take = value[index] + maxValue(weight, value, index - 1, maxWeight - weight[index], memo);
         }
-        memo[i]=max;
-        return max;
+        int notTake= maxValue(weight,value,index-1,maxWeight, memo);
+        memo[maxWeight][index]=Math.max(take,notTake);
+        return memo[maxWeight][index];
 
     }
 
     public static void main(String[] args) {
-        KnapSack01 knapsack = new KnapSack01();
+        KnapSack01 solution = new KnapSack01();
 
-       /* int[] weights1 = {1, 3, 4};
-        int[] values1 = {15, 20, 30};
-        int W1 = 4;
-        System.out.println(knapsack.knapsack(weights1, values1, W1)); // Expected: 30*/
-
-        int[] weights2 = {2, 3, 5};
-        int[] values2 = {10, 20, 50};
-        int W2 = 5;
-        System.out.println(knapsack.knapsack(weights2, values2, W2)); // Expected: 50
-
-        int[] weights3 = {1, 2, 3};
-        int[] values3 = {10, 15, 40};
-        int W3 = 6;
-        System.out.println(knapsack.knapsack(weights3, values3, W3)); // Expected: 65
+        System.out.println(solution.knapsack(new int[]{6, 5, 1, 5, 6, 5, 9}, new int[]{5, 3, 4, 9, 6, 1, 1}, 63)); // Expected: 29
+        System.out.println(solution.knapsack(new int[]{1, 5, 6, 9, 7, 9, 7}, new int[]{1, 7, 1, 5, 1, 7, 7}, 37)); // Expected: 23
+        System.out.println(solution.knapsack(new int[]{3,11}, new int[]{4,7}, 13)); // Expected: 4
+        System.out.println(solution.knapsack(new int[]{7}, new int[]{1}, 1)); // Expected: 0
+        System.out.println(solution.knapsack(new int[]{10}, new int[]{8}, 85)); // Expected: 8
+        System.out.println(solution.knapsack(new int[]{7, 6, 9}, new int[]{3, 3, 5}, 51)); // Expected: 11
+        System.out.println(solution.knapsack(new int[]{9}, new int[]{6}, 52)); // Expected: 6
+        System.out.println(solution.knapsack(new int[]{1}, new int[]{4}, 53)); // Expected: 4
+        System.out.println(solution.knapsack(new int[]{3, 9, 3, 8, 8, 7, 9, 5, 10}, new int[]{5, 1, 6, 10, 1, 6, 3, 7, 5}, 83)); // Expected: 44
     }
+
 
 }
