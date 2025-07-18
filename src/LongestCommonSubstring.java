@@ -1,37 +1,47 @@
 public class LongestCommonSubstring {
-
+    String answer="";
+    int max=0;
     public String longestCommonSubstring(String string1,String string2){
 
-        char[]str1=string1.toCharArray();
-        char[]str2=string2.toCharArray();
-        int[][] memo= new int[str1.length][str2.length];
-        int str1LI=-1;
-        int str2LJ=-1;
-        int max=Integer.MIN_VALUE;
-        for (int i = 0; i < memo.length; i++) {
-            for (int j = 0; j < memo[0].length; j++) {
+        String ans= findLongest(string1.toCharArray(),string2.toCharArray(),string1.length()-1,string2.length()-1,"");
+        return ans;
+    }
 
-                if(str1[i]==str2[j]){
-                    memo[i][j]=1+ ((i-1<0 || j-1<0)?0:memo[i-1][j-1]);
-                    if(max<=memo[i][j]){
-                        str1LI=i;
-                        str2LJ=j;
-                        max=memo[i][j];
-                    }
-                }
-                else{
-                    memo[i][j]=0;
-                }
-            }
+    public String findLongest(char[]str1,char[]str2,int index1,int index2,String string){
+        if(index2<0 ||index1<0){
+            return "";
+        }
+        String temp="";
+        if(str1[index1]==str2[index2]){
+            string=str1[index1]+string;
+            temp= findLongest(str1,str2,index1-1,index2-1,string);
 
         }
-        return String.valueOf(str2,str2LJ-max+1,max);
+
+
+            String s1=findLongest(str1,str2,index1,index2-1,"");
+            String s2=findLongest(str1,str2,index1-1,index2,"");
+            if(s1.length()>s2.length()){
+                temp=s1;
+            }
+            else{
+                temp=s2;
+            }
+
+
+        if(temp.length()>string.length()){
+            return temp;
+        }
+        return string;
+
 
     }
 
     public static void main(String[] args) {
         LongestCommonSubstring lcs= new LongestCommonSubstring();
-        System.out.println(lcs.longestCommonSubstring("abac","cab"));
+        System.out.println(lcs.longestCommonSubstring("yxxzzxxxx","yzyzxxyxxz"));
     }
+
+
 
 }
