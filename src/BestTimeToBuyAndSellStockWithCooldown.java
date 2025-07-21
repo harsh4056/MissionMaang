@@ -1,37 +1,15 @@
 import java.util.Arrays;
 
-public class BestTimeToBuyAndSellStockII {
+public class BestTimeToBuyAndSellStockWithCooldown {
 
     public int maxProfit(int[] prices) {
-
-
-        int current=Integer.MAX_VALUE;
-        int profit=0;
-        for(int price:prices){
-            if(price<current)
-            {
-                current=price;
-            }
-            else if(price-current>0){
-                profit+=price-current;
-                current=price;
-
-            }
-
-        }
-        return profit;
-
-    }
-
-
-    public int maxProfit2(int[] prices) {
         int[][] dp= new int[2][prices.length];
         Arrays.fill(dp[0],-1);
         Arrays.fill(dp[1],-1);
         int ans=findProfit(prices,0,0,dp);
         return dp[0][0];
-
     }
+
 
     public int findProfit(int[]prices, int index, int bought, int[][] dp){
 
@@ -49,7 +27,7 @@ public class BestTimeToBuyAndSellStockII {
         } else {
             // We can SELL
             profit = Math.max(
-                    prices[index] + findProfit(prices, index + 1, 0, dp),  // Sell
+                    prices[index] + findProfit(prices, index + 2, 0, dp),  // Sell
                     findProfit(prices, index + 1, 1, dp)                   // Skip
             );
         }
@@ -59,9 +37,12 @@ public class BestTimeToBuyAndSellStockII {
         return profit;
     }
 
-
     public static void main(String[] args) {
-        BestTimeToBuyAndSellStockII stockII= new BestTimeToBuyAndSellStockII();
-        System.out.println(stockII.maxProfit2(new int[]{7,1,5,3,6,4}));
+        BestTimeToBuyAndSellStockWithCooldown solution = new BestTimeToBuyAndSellStockWithCooldown();
+
+        System.out.println(solution.maxProfit(new int[]{1,2,3,0,2})); // Expected: 3
+        System.out.println(solution.maxProfit(new int[]{1})); // Expected: 0
+        System.out.println(solution.maxProfit(new int[]{2,1,4})); // Expected: 3
     }
+
 }

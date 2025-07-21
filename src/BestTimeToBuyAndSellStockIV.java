@@ -1,17 +1,18 @@
 import java.util.Arrays;
 
-public class BestTimeToBuyAndSellStockIII {
+public class BestTimeToBuyAndSellStockIV {
+
+    public int maxProfit(int k, int[] prices) {
 
 
-    public int maxProfit(int[] prices) {
 
-        int[][][] dp = new int[3][2][prices.length];
+        int[][][] dp = new int[k+1][2][prices.length];
         for (int[][] ints : dp) {
             Arrays.fill(ints[0],-1);
             Arrays.fill(ints[1],-1);
         }
-        findProfit(prices,0,0,2,dp);
-        return dp[2][0][0];
+        findProfit(prices,0,0,k,dp);
+        return dp[k][0][0];
 
     }
 
@@ -44,8 +45,12 @@ public class BestTimeToBuyAndSellStockIII {
     }
 
     public static void main(String[] args) {
-        BestTimeToBuyAndSellStockIII solution = new BestTimeToBuyAndSellStockIII();
-        System.out.println(
-        solution.maxProfit(new int[]{3,3,5,0,0,3,1,4}));
+        BestTimeToBuyAndSellStockIV solution = new BestTimeToBuyAndSellStockIV();
+
+        System.out.println(solution.maxProfit(4, new int[]{1,2,4,2,5,7,2,4,9,0})); //
+        System.out.println(solution.maxProfit(2, new int[]{2,4,1})); // Expected: 2
+        System.out.println(solution.maxProfit(2, new int[]{3,2,6,5,0,3})); // Expected: 7
+        System.out.println(solution.maxProfit(1, new int[]{1,2})); // Expected: 1
     }
+
 }
