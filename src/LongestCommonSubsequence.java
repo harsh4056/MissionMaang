@@ -69,7 +69,7 @@ public class LongestCommonSubsequence {
         LongestCommonSubsequence sol = new LongestCommonSubsequence();
 
 
-        System.out.println(sol.longestCommonSubsequence("geek","eke"));
+        System.out.println(sol.longestCommonSubsequence("bbbab","babbb"));
 
 
 
