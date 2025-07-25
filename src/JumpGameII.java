@@ -10,6 +10,28 @@ public class JumpGameII {
 
         return findJumps(nums,0,dp);
     }
+        public int jump2(int[] nums) {
+            int n=nums.length;
+            if(n==1){
+                return 0;
+            }
+            int count=0;
+            int l=1;
+            int r=nums[0];
+            while(r<n-1){
+
+                int farthest=0;
+                for(int i=l;i<=r;i++){
+                    farthest=Math.max(farthest,i+nums[i]);
+                }
+                l=r+1;
+                r=farthest;
+                count++;
+            }
+
+            return count+1;
+        }
+
 
     public int findJumps(int[] nums,int index,int[]dp){
         if(index>=nums.length-1){
@@ -30,9 +52,12 @@ public class JumpGameII {
     public static void main(String[] args) {
         JumpGameII solution = new JumpGameII();
 
-        System.out.println(solution.jump(new int[]{2,3,1,1,4})); // 2
-        System.out.println(solution.jump(new int[]{2,3,0,1,4})); // 2
-        System.out.println(solution.jump(new int[]{1,1,1,1}));   // 3
+        System.out.println(solution.jump2(new int[]{1,2})); // 3
+        System.out.println(solution.jump2(new int[]{5,9,3,2,1,0,2,3,3,1,0,0})); // 3
+        System.out.println(solution.jump2(new int[]{2,1,1,1,1})); // 3
+        System.out.println(solution.jump2(new int[]{2,3,1,1,4})); // 2
+        System.out.println(solution.jump2(new int[]{2,3,0,1,4})); // 2
+        System.out.println(solution.jump2(new int[]{1,1,1,1}));   // 3
     }
 
 }

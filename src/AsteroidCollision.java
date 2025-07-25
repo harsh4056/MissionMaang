@@ -1,35 +1,38 @@
+import java.util.Stack;
+
 public class AsteroidCollision {
     public int[] asteroidCollision(int[] asteroids) {
-        IntStack stack = new IntStack(asteroids.length);
+        Stack<Integer> stack = new Stack<>();
+        int index=0;
+        while (index<asteroids.length){
 
-        for (int asteroid : asteroids) {
-            if (stack.isEmpty() || asteroid > 0) {
-                stack.push(asteroid);
-            } else {
-                while (!stack.isEmpty() && stack.peek() > 0) {
-                    int top = stack.peek();
-                    if (top < -asteroid) {
-                        stack.pop(); // right asteroid smaller, explode it
-                    } else if (top == -asteroid) {
-                        stack.pop(); // both explode
-                        asteroid = 0;
-                        break;
-                    } else {
-                        asteroid = 0; // left asteroid destroyed
-                        break;
+            if(stack.isEmpty() ){
+                stack.push(asteroids[index++]);
+            }
+            else{
+                if(stack.peek()>0 && asteroids[index]<0) {
+                    if (stack.peek() == Math.abs(asteroids[index])) {
+                        stack.pop();
+                        index++;
+                    } else if (stack.peek() < Math.abs(asteroids[index])) {
+                        stack.pop();
+                    } else if (stack.peek() > Math.abs(asteroids[index])) {
+                        index++;
                     }
                 }
-                if (asteroid != 0) {
-                    stack.push(asteroid);
+                else{
+                    stack.push(asteroids[index++]);
                 }
             }
-        }
 
-        int[] result = new int[stack.size()];
-        for (int i = stack.size() - 1; i >= 0; i--) {
-            result[i] = stack.pop();
+
+
         }
-        return result;
+        int[] arr = stack.stream()
+                .mapToInt(Integer::intValue)
+                .toArray();
+        return arr;
+
     }
 
     public class IntStack {
@@ -48,8 +51,8 @@ public class AsteroidCollision {
         AsteroidCollision obj = new AsteroidCollision();
 
 
-        int[] result0 = obj.asteroidCollision(new int[]{ -2,2,1,-2});
-        System.out.println(java.util.Arrays.toString(result0)); //  [-2,2,1,-2]
+        int[] result0 = obj.asteroidCollision(new int[]{ 1,-1,1,-2});
+        System.out.println(java.util.Arrays.toString(result0)); //  [-2]
         int[] result1 = obj.asteroidCollision(new int[]{5, 10, -5});
         System.out.println(java.util.Arrays.toString(result1)); // Expected: [5, 10]
 

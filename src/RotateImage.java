@@ -3,24 +3,16 @@ public class RotateImage {
     public void rotate(int[][] matrix) {
         int n = matrix.length;
 
-        // Step 1: Transpose
-        for (int i = 0; i < n; i++) {
-            for (int j = i + 1; j < n; j++) {
-                int temp = matrix[i][j];
-                matrix[i][j] = matrix[j][i];
-                matrix[j][i] = temp;
-            }
-        }
+        int len=n/2;
+        for(int i=0;i<len;i++){
+            for(int j=i;j<n-i;i++){
+                int lastIndex=n-i-1;
+                int temp= matrix[j][lastIndex];
+                matrix[j][lastIndex]=matrix[i][j];
+                matrix[i][j]=matrix[lastIndex-j][i];
+                matrix[lastIndex-j][i]=matrix[i][lastIndex-j];
+                matrix[i][lastIndex-j]=temp;
 
-        // Step 2: Reverse each row
-        for (int i = 0; i < n; i++) {
-            int left = 0, right = n - 1;
-            while (left < right) {
-                int temp = matrix[i][left];
-                matrix[i][left] = matrix[i][right];
-                matrix[i][right] = temp;
-                left++;
-                right--;
             }
         }
     }
