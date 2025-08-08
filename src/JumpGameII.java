@@ -11,25 +11,27 @@ public class JumpGameII {
         return findJumps(nums,0,dp);
     }
         public int jump2(int[] nums) {
+
             int n=nums.length;
             if(n==1){
                 return 0;
             }
-            int count=0;
-            int l=1;
-            int r=nums[0];
-            while(r<n-1){
-
+            int left=1;
+            int right=nums[0];
+            int count=1;
+            while(right<n-1){
                 int farthest=0;
-                for(int i=l;i<=r;i++){
-                    farthest=Math.max(farthest,i+nums[i]);
+                for(int i=left;i<=right;i++){
+                    if(nums[i]+i>farthest){
+                    farthest=nums[i]+i;
+                    }
                 }
-                l=r+1;
-                r=farthest;
+                left=right+1;
+                right=farthest;
                 count++;
-            }
 
-            return count+1;
+            }
+            return count;
         }
 
 
@@ -52,7 +54,7 @@ public class JumpGameII {
     public static void main(String[] args) {
         JumpGameII solution = new JumpGameII();
 
-        System.out.println(solution.jump2(new int[]{1,2})); // 3
+        System.out.println(solution.jump2(new int[]{3,4,3,2,5,4,3})); // 3
         System.out.println(solution.jump2(new int[]{5,9,3,2,1,0,2,3,3,1,0,0})); // 3
         System.out.println(solution.jump2(new int[]{2,1,1,1,1})); // 3
         System.out.println(solution.jump2(new int[]{2,3,1,1,4})); // 2
