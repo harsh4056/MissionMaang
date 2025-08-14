@@ -1,34 +1,40 @@
 public class MinimumSizeSubArraySum {
 
     public int minSubArrayLen(int target, int[] nums) {
-        int right = 0;
         int left = 0;
-        int window = 0;
-        int minWindow = Integer.MAX_VALUE;
+        int right = 0;
+        int rSum = 0;
+        int len = Integer.MAX_VALUE;
+        int n = nums.length;
+        while (left < n) {
+            if(right>=n && rSum<target)
+                break;
 
-        while (right < nums.length) {
-            // Expand window
-            window += nums[right];
-            right++;
-
-            // Shrink window as small as possible while maintaining window sum >= target
-            while (window >= target) {
-                minWindow = Math.min(minWindow, right - left);
-                window -= nums[left];
+            if (rSum < target && right < n) {
+                rSum += nums[right];
+                right++;
+            } else if (rSum >= target) {
+                len = Math.min(len, right - left);
+                rSum -= nums[left];
                 left++;
             }
-        }
+                //System.out.println("Right:" + right + "Left:" + left);
 
-        return minWindow == Integer.MAX_VALUE ? 0 : minWindow;
+
+            }
+
+        if (len == Integer.MAX_VALUE)
+            return 0;
+        return len;
     }
 
 
     public static void main(String[] args) {
         MinimumSizeSubArraySum solution = new MinimumSizeSubArraySum();
 
-        int[] nums1 = {2, 3, 1, 2, 4, 3};
-        int target1 = 7;
-        System.out.println("Result 1: " + solution.minSubArrayLen(target1, nums1));  // Expected 2
+        int[] nums1 = {1,2,3,4,5};
+        int target1 = 11;
+        System.out.println("Result 1: " + solution.minSubArrayLen(target1, nums1));  // Expected 3
 
         int[] nums2 = {1, 4, 4};
         int target2 = 4;

@@ -6,49 +6,36 @@ public class LongestSubstringWithoutRepeatingCharacters {
 
     public int lengthOfLongestSubstring(String s) {
 
-        int start=0;
-        int end=0;
         HashSet<Character> set= new HashSet<>();
-        char []arr= s.toCharArray();
-        int maxLength=0;
+        char []arr=s.toCharArray();
+        int size=0;
+        int start=0;
+        for(char c:arr){
+            if(set.contains(c)){
+                while(set.contains(c)){
 
-        for (char c : arr) {
-            while (set.contains(c)) {
-                set.remove(arr[start]);
-                start++;
-
+                    set.remove(arr[start++]);
+                }
+                set.add(c);
             }
-            end++;
-            set.add(c);
-            maxLength = Math.max(maxLength, end - start);
+            else{
+                set.add(c);
+            }
+            size=Math.max(size, set.size());
+
+
         }
-
-        return maxLength;
-
+        return size;
 
     }
     public static void main(String[] args) {
-        LongestSubstringWithoutRepeatingCharacters obj = new LongestSubstringWithoutRepeatingCharacters();
+        LongestSubstringWithoutRepeatingCharacters sol = new LongestSubstringWithoutRepeatingCharacters();
 
-        String s1 = "abcabcbb";
-        System.out.println("Input: " + s1 + " | Output: " + obj.lengthOfLongestSubstring(s1));
-
-        String s2 = "bbbbb";
-        System.out.println("Input: " + s2 + " | Output: " + obj.lengthOfLongestSubstring(s2));
-
-        String s3 = "pwwkew";
-        System.out.println("Input: " + s3 + " | Output: " + obj.lengthOfLongestSubstring(s3));
-
-        String s4 = "abbac";
-        System.out.println("Input: " + s4 + " | Output: " + obj.lengthOfLongestSubstring(s4));
-
-        String s5 = "abbdc";
-        System.out.println("Input: " + s5 + " | Output: " + obj.lengthOfLongestSubstring(s5));
-
-
-        String s6 = "dvdf";
-        System.out.println("Input: " + s6 + " | Output: " + obj.lengthOfLongestSubstring(s6));
-
+        System.out.println(sol.lengthOfLongestSubstring("abcabcbb")); // Expected: 3 ("abc")
+        System.out.println(sol.lengthOfLongestSubstring("bbbbb"));    // Expected: 1 ("b")
+        System.out.println(sol.lengthOfLongestSubstring("pwwkew"));   // Expected: 3 ("wke")
+        System.out.println(sol.lengthOfLongestSubstring("dvdf"));     // Expected: 3 ("vdf")
     }
+
 
 }

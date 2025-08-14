@@ -1,48 +1,34 @@
 public class ZigZagConversion {
 
     public String convert(String s, int numRows) {
-        if(numRows==1)
-            return s;
-        StringBuilder[] stringBuilders= new StringBuilder[numRows];
-        for (int i = 0; i < stringBuilders.length; i++) {
-            stringBuilders[i]= new StringBuilder();
-
+        StringBuilder[] arr= new StringBuilder[numRows];
+        int n=s.length();
+        int c=0;
+        int parity=1;
+        while(c<n){
+             for(int i=0;i<numRows &&c<n;i++){
+                 if(arr[i]==null){
+                     arr[i]=new StringBuilder();
+                 }
+                 arr[i].append(s.charAt(c));
+                 c++;
+             }
+            for(int i=numRows-2;i>=1 &&c<n;i--){
+                arr[i].append(s.charAt(c));
+                c++;
+            }
         }
-        int rows=0;
-        int length= 0;
-        boolean reverse=false;
-        while (length<s.length()){
-            stringBuilders[rows].append(s.charAt(length));
-
-            if(rows==0){
-                reverse=false;
-            }
-            if(rows==numRows-1){
-                reverse=true;
-            }
-
-            if(reverse){
-                rows--;
-            }
-            else {
-                rows++;
-            }
-
-
-            length++;
+        String res="";
+        for(StringBuilder sb:arr){
+            res=res+sb.toString();
         }
-        StringBuilder answer= new StringBuilder();
-        for (StringBuilder stringBuilder : stringBuilders) {
-            answer.append(stringBuilder);
-        }
-
-        return answer.toString();
+        return res;
 
 
     }
 
     public static void main(String[] args) {
         ZigZagConversion zigZagConversion= new ZigZagConversion();
-        System.out.println(zigZagConversion.convert("PAYPALISHIRING",1));
+        System.out.println(zigZagConversion.convert("PAYPALISHIRING",4));
     }
 }
