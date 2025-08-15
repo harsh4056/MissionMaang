@@ -10,52 +10,56 @@ public class MergeIntervals {
     public int[][] merge(int[][] intervals) {
 
 
-        Arrays.sort(intervals, (a, b) -> {
-            if (a[0] != b[0]) return Integer.compare(a[0], b[0]);
-            return Integer.compare(a[1], b[1]); // Tie-breaker on end
-        });
-
-
-        int start=-1;
-        int end=-1;
-        List<int[]> ints = new ArrayList<>();
-
-        for (int[] interval : intervals) {
-            if(end==-1){
-                end=interval[1];
-                start=interval[0];
-            }
-            if(end>=interval[0]){
-                int tempEnd= Math.max(end, interval[1]);
-                int[]newInterval=   new int[]{start,tempEnd};
-                if(!ints.isEmpty())
-                    ints.remove(ints.size()-1);
-                ints.add(newInterval);
-                end=interval[1];
+        Arrays.sort(intervals, Comparator.comparingInt(a->a[0]));
+        int n=intervals.length;
+        int []prev= new int[]{intervals[0][0],intervals[0][1]};
+        List<int[]> list= new ArrayList<>();
+        for(int i=1;i<n;i++){
+            int []interval=intervals[i];
+            if(interval[0]>=prev[0] && interval[0]<=prev[1]){
+                prev[0]=Math.min(prev[0],interval[0]);
+                prev[1]=Math.max(prev[1],interval[1]);
             }
             else{
-                ints.add(interval);
-                end=interval[1];
-                start=interval[0];
+                list.add(prev);
+                prev=interval;
             }
-
-
-        }
-        int[][] newIntervals= new int[ints.size()][2];
-        for (int i = 0; i < ints.size(); i++) {
-            int[] newInterval = ints.get(i);
-            newIntervals[i]=newInterval;
         }
 
-            return newIntervals;
+        int []interval=intervals[n-1];
+        if(interval[0]>=prev[0] && interval[0]<=prev[1]){
+            prev[0]=Math.min(prev[0],interval[0]);
+            prev[1]=Math.max(prev[1],interval[1]);
+            list.add(prev);
+        }
+        else{
+            list.add(prev);
+
+        }
+
+        int[][] answer= new int[list.size()][2];
+        for(int i=0;i<answer.length;i++){
+            answer[i]=list.get(i);
+        }
+        return answer;
 
     }
 
     public static void main(String[] args) {
-        MergeIntervals mergeIntervals= new MergeIntervals();
-        //mergeIntervals.merge(new int[][]{{1,3},{2,6},{8,15},{15,18}});
-        mergeIntervals.merge(new int[][]{{1,5},{2,3}});
+        MergeIntervals mergeIntervals = new MergeIntervals();
 
+        int[][] result1 = mergeIntervals.merge(new int[][]{{1,3},{2,6},{8,10},{15,18}});
+        System.out.println(Arrays.deepToString(result1));
+        // Expected: [[1,6],[8,10],[15,18]]
+
+        int[][] result2 = mergeIntervals.merge(new int[][]{{1,4},{4,5}});
+        System.out.println(Arrays.deepToString(result2));
+        // Expected: [[1,5]]
+
+        int[][] result3 = mergeIntervals.merge(new int[][]{{2,3},{4,5},{6,7},{8,9},{1,10}});
+        System.out.println(Arrays.deepToString(result3));
+        // Expected: [[1,10]]
     }
+
 
 }
