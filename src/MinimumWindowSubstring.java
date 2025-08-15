@@ -1,52 +1,44 @@
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 public class MinimumWindowSubstring {
-
     public String minWindow(String s, String t) {
+        Set<Character> need = new HashSet<>();
+        for (char c : t.toCharArray()) need.add(c);
 
+        int left = 0, minLen = Integer.MAX_VALUE, start = 0;
+        Set<Character> window = new HashSet<>();
 
-        HashMap<Character,Integer> tMap= new HashMap<>();
-        for(char c:t.toCharArray()){
-            tMap.put(c,tMap.getOrDefault(c,0)+1);
-        }
-        int required = tMap.keySet().size();
-        int formed=0;
-        char[]arr= s.toCharArray();
-        int left=0;
+        for (int right = 0; right < s.length(); right++) {
+            char rc = s.charAt(right);
+            if (!need.contains(rc)) continue; // skip non-t chars
 
+            window.add(rc);
 
-        int minLength = Integer.MAX_VALUE;
-        int minLeft = 0;
-        int minRight = 0;
-
-        HashMap<Character,Integer> windowMap= new HashMap<>();
-        for (int i = 0; i < arr.length; i++) {
-            char c = arr[i];
-            windowMap.put(c,windowMap.getOrDefault(c,0)+1);
-            if (tMap.containsKey(c) && windowMap.get(c).intValue() == tMap.get(c).intValue()) {
-                formed++;
-            }
-            while(formed==required){
-                if(minLength>(i-left+1)){
-                    minLength=Math.min(minLength,(i-left+1));
-                    minLeft=left;
-                    minRight=i;
+            if (window.size() == need.size()) {
+                // shrink while left char not same as right char and both are in t
+                while (left < right) {
+                    char lc = s.charAt(left);
+                    if (!need.contains(lc)) {
+                        left++;
+                        continue;
+                    }
+                    if (lc != rc) {
+                        window.remove(lc);
+                        left++;
+                    } else break;
                 }
-                char fall=arr[left];
-                windowMap.put(fall,windowMap.getOrDefault(fall,0)-1);
-                if (tMap.containsKey(fall) && windowMap.get(fall) < tMap.get(fall)) {
-                    formed--;
+                if (right - left + 1 < minLen) {
+                    minLen = right - left + 1;
+                    start = left;
                 }
-                left++;
-
             }
         }
-        if (minLength == Integer.MAX_VALUE) {
-            return "";
-        }
-        return s.substring(minLeft, minRight + 1);
-
+        return minLen == Integer.MAX_VALUE ? "" : s.substring(start, start + minLen);
     }
 
+    public static void main(String[] args) {
+        MinimumWindowSubstring obj = new MinimumWindowSubstring();
+        System.out.println(obj.minWindow("SDANBDCFF", "ABC"));       // ANBDC
+        System.out.println(obj.minWindow("ADOBECODEBANC", "ABC"));  // BANC
+    }
 }
