@@ -6,57 +6,30 @@ public class ReverseLinkedListII
 
     public ListNode reverseBetween(ListNode head, int left, int right) {
 
-        Stack<ListNode> stack= new Stack<>();
-        ListNode current=head;
-        ListNode newHead=null;
-        int r=right;
-        int l=left;
-        if(left==1){
-            l++;
-            r++;
-            current= new ListNode(0);
-            newHead=current;
-            current.next=head;
-        }
-
-
-        ListNode leftEnd=null;
-        ListNode rightEnd=null;
-        while(current!=null){
-
-            if(l==2){
-                leftEnd=current;
-            }
-
-            if (r==0){
-                rightEnd=current;
-            }
-
-            if(r==0 && l==2){
-                break;
-            }
+        ListNode dummy=new ListNode(501);
+        dummy.next=head;
+        ListNode current= dummy;
+        Stack<ListNode> stack=new Stack<>();
+        int count=0;
+        while(count<left-1){
             current=current.next;
-            l--;
-            r--;
+            count++;
         }
-        if(leftEnd!=null) {
-            ListNode traverse = leftEnd.next;
-            while (traverse != rightEnd && traverse != null) {
-                stack.add(traverse);
-                traverse = traverse.next;
-            }
-            while (!stack.empty() && leftEnd != null) {
+        ListNode start=current;
 
-                leftEnd.next = stack.pop();
-                leftEnd = leftEnd.next;
-            }
-            if (leftEnd != null)
-                leftEnd.next = rightEnd;
+        while(count<right){
+
+            current=current.next;
+            stack.push(current);
+            count++;
         }
-        if(newHead!=null)
-            return newHead.next;
-
-        return head;
+        ListNode last=stack.peek().next;
+        while(!stack.isEmpty()){
+            start.next=stack.pop();
+            start=start.next;
+        }
+        start.next=last;
+        return dummy.next;
 
 
     }

@@ -8,26 +8,26 @@ public class PartitionList {
     public ListNode partition(ListNode head, int x) {
 
 
-        ListNode current=head;
-        ListNode dummyLess=new ListNode(-101);
-        ListNode dummyLessPtr=dummyLess;
-        ListNode dummyMore=new ListNode(-101);
-        ListNode dummyMorePtr=dummyMore;
-        while (current!=null){
-
-            if(current.val>=x){
-                dummyMore.next=current;
-                dummyMore=dummyMore.next;
-            }
-            else {
-                dummyLess.next=current;
-                dummyLess=dummyLess.next;
-            }
+        ListNode dummy=new ListNode(-101);
+        dummy.next=head;
+        ListNode current=dummy;
+        ListNode ahead=head;
+        while(ahead.val<x){
+            ahead=ahead.next;
             current=current.next;
         }
-        dummyMore.next=null;
-        dummyLess.next=dummyMorePtr.next;
-        return  dummyLessPtr.next;
+        while(ahead!=null &&ahead.next!=null ){
+            if(ahead.next.val<x){
+                ListNode temp=ahead.next;
+                ahead.next=ahead.next.next;
+                ListNode next=current.next;
+                current.next=temp;
+                temp.next=next;
+                current=current.next;
+            }
+            ahead=ahead.next;
+        }
+        return dummy.next;
     }
 
 

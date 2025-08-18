@@ -4,34 +4,24 @@ public class RemoveDuplicatesFromSortedListII {
 
     public ListNode deleteDuplicates(ListNode head) {
 
-
-        ListNode prev=new ListNode(-101);
-        ListNode nodeZero=prev;
-        prev.next=head;
-
-        ListNode current=head;
-        boolean duplicate;
+        ListNode dummy= new ListNode(101);
+        dummy.next=head;
+        ListNode current=dummy;
+        ListNode ahead;
         while(current!=null){
-            duplicate=false;
-            ListNode holder=current;
-            while (current.next!=null && current.val==current.next.val  ){
+            ahead=current.next;
+            if(ahead!=null &&ahead.next!=null &&ahead.val==ahead.next.val) {
+                while (ahead.next != null && ahead.val == ahead.next.val) {
+                    ahead = ahead.next;
+                }
+                current.next=ahead.next;
+            }
+            else{
                 current=current.next;
-                duplicate=true;
-            }
-
-            if(!duplicate){
-                prev.next=current;
-                prev=current;
-            }
-            current=current.next;
-            if(duplicate && current==null){
-                prev.next= null;
-
             }
 
         }
-
-        return nodeZero.next;
+        return dummy.next;
 
     }
 
@@ -39,7 +29,7 @@ public class RemoveDuplicatesFromSortedListII {
         RemoveDuplicatesFromSortedListII solution = new RemoveDuplicatesFromSortedListII();
 
         // Create a test list: 1 -> 2 -> 3 -> 3 -> 4 -> 4 -> 5
-        ListNode head = createList(new int[]{1,1,1,2,3,3});
+        ListNode head = createList(new int[]{1,1,1,2,2,3,3});
 
         // Apply the method
         ListNode newHead = solution.deleteDuplicates(head);
