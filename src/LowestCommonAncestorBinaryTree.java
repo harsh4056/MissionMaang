@@ -1,47 +1,21 @@
-import java.util.HashSet;
-import java.util.Set;
-
 public class LowestCommonAncestorBinaryTree {
 
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        Set<TreeNode> pPathSet = new HashSet<>();
-        findPathToSet(root, p, pPathSet);
-
-        TreeNode[] result = new TreeNode[1]; // simulate pass-by-reference
-        findLCAFromQ(root, q, pPathSet, result);
-        return result[0];
-    }
-
-    // Store path from root to p in a HashSet
-    boolean findPathToSet(TreeNode root, TreeNode target, Set<TreeNode> set) {
-        if (root == null) return false;
-
-        if (root == target ||
-                findPathToSet(root.left, target, set) ||
-                findPathToSet(root.right, target, set)) {
-            set.add(root);
-            return true;
-        }
-
-        return false;
-    }
-
-    // Traverse from q up using recursion and check for first node in p's path
-    TreeNode findLCAFromQ(TreeNode root, TreeNode target, Set<TreeNode> pPathSet, TreeNode[] result) {
-        if (root == null) return null;
-
-        if (root == target ||
-                findLCAFromQ(root.left, target, pPathSet, result) != null ||
-                findLCAFromQ(root.right, target, pPathSet, result) != null) {
-
-            if (result[0] == null && pPathSet.contains(root)) {
-                result[0] = root;
-            }
-
+        if(root==null) return null;
+        if(root==p || root==q)
+            return root;
+        TreeNode left=lowestCommonAncestor(root.left,p,q);
+        TreeNode right=lowestCommonAncestor(root.right,p,q);
+        if(left!=null && right!=null){
             return root;
         }
+        else if(left==null){
+            return right;
+        }
+        else {
+            return left;
+        }
 
-        return null;
     }
 
     // Sample main to test
@@ -58,7 +32,7 @@ public class LowestCommonAncestorBinaryTree {
         root.left.right.right = new TreeNode(4);
 
         TreeNode p = root.left; // 5
-        TreeNode q = root.right; // 1
+        TreeNode q = root.left.right.right; // 4
 
         LowestCommonAncestorBinaryTree lcaFinder = new LowestCommonAncestorBinaryTree();
         TreeNode lca = lcaFinder.lowestCommonAncestor(root, p, q);

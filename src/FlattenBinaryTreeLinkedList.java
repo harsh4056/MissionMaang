@@ -3,65 +3,23 @@ import com.sun.source.tree.Tree;
 public class FlattenBinaryTreeLinkedList {
 
 
-    TreeNode prev = null;
-
+    TreeNode head=null;
     public void flatten(TreeNode root) {
-        preOrder(root);
+        head=new TreeNode();
+        flat(root);
     }
-
-    public void preOrder(TreeNode root) {
-        if (root == null)
-            return;
-
-        if (prev != null) {
-            prev.right = root;
-            prev.left = null;
-        }
-
-        prev = root;
-
-        // Store left and right before recursion
-        TreeNode left = root.left;
-        TreeNode right = root.right;
-
-        preOrder(left);
-        preOrder(right);
-    }
-
-    public void inOrder(TreeNode root) {
-        if (root == null)
-            return;
+    public TreeNode flat(TreeNode root){
+        if(root==null) return null;
 
 
+        TreeNode right=flat(root.right);
+        TreeNode left=flat(root.left);
+        System.out.println(root.val);
 
-        // Store left and right before recursion
-        TreeNode left = root.left;
-        TreeNode right = root.right;
-
-        inOrder(left);
-        if (prev != null) {
-            prev.right = root;
-            prev.left = null;
-        }
-        System.out.print(root.val + " ");
-
-
-        inOrder(right);
+        return root;
 
     }
 
-
-    /*private TreeNode prev = null;
-
-    public void flatten(TreeNode root) {
-        if (root == null)
-            return;
-        flatten(root.right);
-        flatten(root.left);
-        root.right = prev;
-        root.left = null;
-        prev = root;
-    }*/
     public static void main(String[] args) {
         // Construct tree: [1,2,5,3,4,null,6]
         TreeNode root = new TreeNode(1);
@@ -72,7 +30,7 @@ public class FlattenBinaryTreeLinkedList {
         root.right.right = new TreeNode(6);
 
         FlattenBinaryTreeLinkedList solution = new FlattenBinaryTreeLinkedList();
-        solution.inOrder(root);
+        solution.flatten(root) ;
 
         // Print result as right-skewed list
         TreeNode current = root;
