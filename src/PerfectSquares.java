@@ -4,16 +4,16 @@ public class PerfectSquares {
 
     public int numSquares(int n) {
         List<Integer> squares=new ArrayList<>();
-        int count =1;
 
         int[] dp= new int[n+1];
-        dp[0]=1;
         Arrays.fill(dp,Integer.MAX_VALUE);
-        while(count*count<=n){
-            int square=count*count;
-            squares.add(square);
-            dp[square]=1;
-            count++;
+        dp[0]=1;
+        dp[1]=1;
+        int limit= (int) Math.floor( Math.sqrt(n));
+
+        for (int i=1;i<limit;i++){
+            dp[i*i]=1;
+            squares.add(i*i);
         }
 
 
@@ -30,9 +30,9 @@ public class PerfectSquares {
     public static void main(String[] args) {
         PerfectSquares ps = new PerfectSquares();
 
-        System.out.println(ps.numSquares(12)); // Expected: 3 (4 + 4 + 4)
-        System.out.println(ps.numSquares(13)); // Expected: 2 (4 + 9)
-        System.out.println(ps.numSquares(1));  // Expected: 1 (1)
+        //System.out.println(ps.numSquares(12)); // Expected: 3 (4 + 4 + 4)
+        //System.out.println(ps.numSquares(13)); // Expected: 2 (4 + 9)
+        System.out.println(ps.numSquares(4));  // Expected: 1 (1)
     }
 
 }

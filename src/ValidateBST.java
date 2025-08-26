@@ -1,29 +1,45 @@
 public class ValidateBST {
-    int prev=Integer.MIN_VALUE;
-    boolean first=true;
+    boolean result=true;
+    long prev= Long.MIN_VALUE;
     public boolean isValidBST(TreeNode root) {
-        if(root==null)
-            return true;
-        boolean b1=isValidBST(root.left);
-        boolean b2=prev<root.val;
-        if(first){
-            first=false;
-            b2=true;
+         result=true;
+         findOut(root);
+         return result;
+
+    }
+    public void findOut(TreeNode root){
+        if(root==null) return ;
+        if(!result) return;
+        findOut(root.left);
+        if(prev<root.val){
+            prev=root.val;
+        }else{
+            result=false;
         }
-        prev=root.val;
-        boolean b3=isValidBST(root.right);
-        return b1&&b2&&b3;
+        findOut(root.right);
 
     }
 
     public static void main(String[] args) {
-        ValidateBST validateBST= new ValidateBST();
-        TreeNode root = new TreeNode(2);
+        ValidateBST solution = new ValidateBST();
 
-        root.left = new TreeNode(2);
-        root.right = new TreeNode(2);
+        // Test case 1: Valid BST
+        TreeNode root1 = new TreeNode(1);
+        root1.left = new TreeNode(2);
+        root1.right = new TreeNode(3);
+        //System.out.println(solution.isValidBST(root1)); // Expected: true
 
+        // Test case 2: Invalid BST (from given example [5,4,6,null,null,3,7])
+        TreeNode root2 = new TreeNode(5);
+        root2.left = new TreeNode(4);
+        root2.right = new TreeNode(6);
+        root2.right.left = new TreeNode(3);
+        root2.right.right = new TreeNode(7);
+        System.out.println(solution.isValidBST(root2)); // Expected: false
 
-        System.out.println(validateBST.isValidBST(root));
+        // Test case 3: Single node tree
+        TreeNode root3 = new TreeNode(1);
+        System.out.println(solution.isValidBST(root3)); // Expected: true
     }
+
 }
