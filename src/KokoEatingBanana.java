@@ -2,7 +2,7 @@ public class KokoEatingBanana {
 
     public int minEatingSpeed(int[] piles, int h) {
 
-        int low= piles.length;
+        int low=1;
         int high=Integer.MIN_VALUE;
         for (int pile : piles) {
 
