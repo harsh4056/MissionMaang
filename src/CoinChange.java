@@ -5,24 +5,27 @@ import java.util.Comparator;
 public class CoinChange {
 
     public int coinChange(int[] coins, int amount) {
-        if(amount==0)
+        if(amount ==0)
             return 0;
-        int []dp= new int[amount+1];
-        Arrays.fill(dp,Integer.MAX_VALUE-1);
-        for (int coin : coins) {
-            if(coin<=amount) {
-                dp[coin] = 1;
-            }
-        }
-        for (int i = 1; i <=amount ; i++) {
-            for (int coin : coins) {
-                if(i-coin>=1){
-                    dp[i]=Math.min(dp[i-coin]+1, dp[i]);
+        if(coins.length==0) return 0;
+        Arrays.sort(coins);
+        if(coins[0]>amount) return -1;
+
+
+        int []dp = new int[amount+1];
+        Arrays.fill(dp,Integer.MAX_VALUE);
+        dp[0]=0;
+        for(int i=1;i<=amount;i++){
+            for(int coin:coins){
+                int prev=i-coin<0?Integer.MAX_VALUE:dp[i-coin];
+                if(prev!=Integer.MAX_VALUE){
+                    prev++;
                 }
+
+                dp[i]= Math.min(prev,dp[i]);
             }
         }
-        if(dp[amount]==Integer.MAX_VALUE-1)
-            return -1;
+        if(dp[amount]==Integer.MAX_VALUE) return -1;
         return dp[amount];
 
 
@@ -59,7 +62,8 @@ public class CoinChange {
 
     public static void main(String[] args) {
         CoinChange  coinChange= new CoinChange();
-        System.out.println(coinChange.coinChange2(new int[]{1,2,5},10000));
+        System.out.println(coinChange.coinChange(new int[]{1,2,5},11));
+        System.out.println(coinChange.coinChange(new int[]{2},3));
     }
 
 
