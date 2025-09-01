@@ -9,7 +9,7 @@ public class SearchInARotatedSortedArray {
             if (nums[mid] == target) {
                 return mid;
             }
-            
+
 
 
             // Check if left half is sorted
