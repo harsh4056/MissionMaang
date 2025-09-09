@@ -1,62 +1,89 @@
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 public class SnakeAndLadder {
 
-    public int snakesAndLadders(int[][] board) {
-        Queue<int[]> q = new LinkedList<>();
-        int n=board.length;
-        boolean[] visited = new boolean[n * n + 1];
 
-        q.offer(new int[]{1, 0});  // start at square 1 with 0 moves
+    public int snakesAndLadders(int[][] board) {
+        int n = board.length;
+        boolean[] visited = new boolean[n * n + 1];
+        Queue<int[]> queue = new ArrayDeque<>();
+        queue.offer(new int[]{1, 0});
         visited[1] = true;
 
-        while (!q.isEmpty()) {
-            int[] curr = q.poll();
-            int currSquare = curr[0];
-            int moves = curr[1];
+        while (!queue.isEmpty()) {
+            int[] curr = queue.poll();
+            int loc = curr[0], step = curr[1];
 
-            if (currSquare == n * n) return moves;
+            for (int i = 1; i <= 6 && loc + i <= n * n; i++) {
+                int next = loc + i;
+                int[] cell = getIndex(next, n);
+                int r = cell[0], c = cell[1];
+                if (board[r][c] != -1) next = board[r][c];
+                if (next == n * n) return step + 1;
 
-            int next = -1;
-
-            for (int i = 1; i <= 6; i++) {
-                int temp = currSquare + i;
-                if (temp > n * n) break;
-
-                int[] coords = getCoordinates(temp, n);
-                int r = coords[0], c = coords[1];
-
-                if (board[r][c] == -1) {
-                    next = temp; // keep latest valid -1 square
-                } else {
-                    // enqueue snake or ladder directly
-                    int jump = board[r][c];
-                    if (!visited[jump]) {
-                        visited[jump] = true;
-                        q.offer(new int[]{jump, moves + 1});
-                    }
+                if (!visited[next]) {
+                    visited[next] = true;
+                    queue.offer(new int[]{next, step + 1});
                 }
             }
+        }
+        return -1;
+    }
 
-            // Add best normal move
-            if (next != -1 && !visited[next]) {
-                visited[next] = true;
-                q.offer(new int[]{next, moves + 1});
+        public int[] getIndex(int location,int n){
+            int temp=Math.ceilDiv(location,n);
+            int i=n-temp;
+            int j=0;
+            if(temp%2==1){
+                j=(location+(n-1))%n;
             }
+            else{
+                j=(n-(location%n))%n;
+            }
+            return new int[]{i,j};
         }
-        return 0;
+
+
+    public static void main(String[] args) {
+        SnakeAndLadder sol = new SnakeAndLadder();
+
+        // Test case 1
+        int[][] board1 = {
+                {-1, -1, -1, -1, -1, -1},
+                {-1, -1, -1, -1, -1, -1},
+                {-1, -1, -1, -1, -1, -1},
+                {-1, 35, -1, -1, 13, -1},
+                {-1, -1, -1, -1, -1, -1},
+                {-1, 15, -1, -1, -1, -1}
+        };
+        System.out.println(sol.snakesAndLadders(board1)); // Expected: 4
+
+        // Test case 2
+        int[][] board2 = {
+                {-1, -1, -1, -1, -1, -1},
+                {-1, -1, -1, -1, -1, -1},
+                {-1, -1, -1, -1, -1, -1},
+                {-1, 35, -1, -1, 13, -1},
+                {-1, -1, -1, -1, -1, -1},
+                {-1, -1, -1, -1, -1, -1}
+        };
+        System.out.println(sol.snakesAndLadders(board2)); // Expected: 4
+
+        // Test case 3
+        int[][] board3 = {
+                {-1, -1},
+                {-1, 3}
+        };
+        System.out.println(sol.snakesAndLadders(board3)); // Expected: 2
+
+        int[][] board4 = {
+                {1, 1, -1},
+                {1, 1, 1},
+                {-1, 1, 1}
+        };
+        System.out.println(sol.snakesAndLadders(board4)); // Expected: -1
 
     }
 
-
-    int[] getCoordinates(int square, int n) {
-        int row = n - 1 - (square - 1) / n;
-        int col = (square - 1) % n;
-        if (((n - 1 - row) % 2) == 1) {
-            col = n - 1 - col;
-        }
-        return new int[]{row, col};
-    }
 
 }
