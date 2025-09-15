@@ -7,37 +7,31 @@ public class SlidingWindowMaximum {
 
 
     public int[] maxSlidingWindow(int[] nums, int k) {
+        Deque<Integer> deque = new ArrayDeque<>();
+        int n=nums.length;
+        int[]result= new int[n];
+        for(int i=0;i<k;i++){
 
-        Deque<int[]> deque= new ArrayDeque<>();
-
-        int[]ans= new int[nums.length-k+1];
-        int count=0;
-        for (int i = 0; i < k; i++) {
-            if(deque.isEmpty()){
-                deque.addLast(new int[]{nums[i],i});
-            }
-            while(!deque.isEmpty() && deque.getLast()[0]<nums[i]){
+            while(!deque.isEmpty() &&nums[deque.peekLast()]<nums[i]){
                 deque.removeLast();
             }
-            deque.addLast(new int[]{nums[i],i});
+            deque.addLast(i);
         }
-        ans[count++]=(deque.getFirst()[0]);
-
-        for (int i = k; i <nums.length ; i++) {
-            while(!deque.isEmpty() && deque.getLast()[0]<nums[i]){
-                deque.removeLast();
-            }
-            deque.addLast(new int[]{nums[i],i});
-            while(!deque.isEmpty() && deque.getFirst()[1]<=i-k){
+        result[0]=nums[deque.peekFirst()];
+        for(int i=k;i<n;i++){
+            int till=i-k;
+            while(!deque.isEmpty() &&deque.peekFirst()<=till){
                 deque.removeFirst();
             }
 
-            ans[count++]=(deque.getFirst()[0]);
+            result[till+1]=(!deque.isEmpty())?nums[deque.peekLast()]:nums[i];
+            while(!deque.isEmpty() &&nums[deque.peekFirst()]<nums[i]){
+                deque.removeLast();
+            }
+            deque.add(i);
+
         }
-
-        return ans;
-
-
+        return result;
     }
 
     public static void main(String[] args) {
