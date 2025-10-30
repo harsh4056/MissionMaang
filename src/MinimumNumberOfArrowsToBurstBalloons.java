@@ -7,46 +7,40 @@ public class MinimumNumberOfArrowsToBurstBalloons
 {
 
     public int findMinArrowShots(int[][] points) {
-
-        Arrays.sort(points, (a, b) -> {
-            if (a[1] != b[1]) return Integer.compare(a[1], b[1]);
-            return 0;
+        int n=points.length;
+        Arrays.sort(points,(a,b)->{
+            if(a[0]==b[0])
+                return a[1]-b[1];
+            return a[0]-b[0];
         });
+        int []can=points[0];
+        int count=1;
+        for(int i=1;i<n;i++){
+            int []curr= points[i];
+            if(curr[0]>=can[0] && curr[0]<=can[1]){
 
-
-        int end=-1;
-
-        int count=0;
-        for (int[] interval : points) {
-            if(end==-1){
-                end=interval[1];
+            }
+            else{
                 count++;
+                can=curr;
             }
-            if(end<=interval[1] && end>=interval[0]){
-                continue;
-
-            }
-            count++;
-            end=interval[1];
-
         }
         return count;
     }
-
     public static void main(String[] args) {
-        MinimumNumberOfArrowsToBurstBalloons solution = new MinimumNumberOfArrowsToBurstBalloons();
+        MinimumNumberOfArrowsToBurstBalloons sol = new MinimumNumberOfArrowsToBurstBalloons();
 
-        int[][] points1 = {{10,16}, {2,8}, {1,6}, {7,12}};
-        int result1 = solution.findMinArrowShots(points1);
-        System.out.println("Minimum arrows needed (Test 1): " + result1);
+        int[][] points1 = {{3,9},{7,12},{3,8},{6,8},{9,10},{2,9},{0,9},{3,9},{0,6},{2,8}};
+        int[][] points2 = {{10,16},{2,8},{1,6},{7,12}};
+        int[][] points3 = {{1,2},{3,4},{5,6},{7,8}};
+        int[][] points4 = {{9,12},{1,10},{4,11},{8,12},{3,9},{6,9},{6,7}};
+        System.out.println(sol.findMinArrowShots(points4)); // Expected: 2
+        System.out.println(sol.findMinArrowShots(points1)); // Expected: 2
+        System.out.println(sol.findMinArrowShots(points2)); // Expected: 2
+        System.out.println(sol.findMinArrowShots(points3)); // Expected: 4
 
-        int[][] points2 = {{1,2}, {3,4}, {5,6}, {7,8}};
-        int result2 = solution.findMinArrowShots(points2);
-        System.out.println("Minimum arrows needed (Test 2): " + result2);
-
-        int[][] points3 = {{1,2}, {2,3}, {3,4}, {4,5}};
-        int result3 = solution.findMinArrowShots(points3);
-        System.out.println("Minimum arrows needed (Test 3): " + result3);
     }
+
+
 
 }
