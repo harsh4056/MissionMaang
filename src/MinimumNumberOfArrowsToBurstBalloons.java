@@ -18,7 +18,8 @@ public class MinimumNumberOfArrowsToBurstBalloons
         for(int i=1;i<n;i++){
             int []curr= points[i];
             if(curr[0]>=can[0] && curr[0]<=can[1]){
-
+                can[0]= curr[0];
+                can[1]=Math.min(can[1],curr[1]);
             }
             else{
                 count++;
