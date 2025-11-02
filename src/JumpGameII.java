@@ -4,62 +4,33 @@ public class JumpGameII {
 
     public int jump(int[] nums) {
         int n=nums.length;
-
-        int []dp= new int[n];
-        Arrays.fill(dp,10000);
-
-        return findJumps(nums,0,dp);
-    }
-        public int jump2(int[] nums) {
-
-            int n=nums.length;
-            if(n==1){
-                return 0;
-            }
-            int left=1;
-            int right=nums[0];
-            int count=1;
-            while(right<n-1){
-                int farthest=0;
-                for(int i=left;i<=right;i++){
-                    if(nums[i]+i>farthest){
-                    farthest=nums[i]+i;
-                    }
+        int maxRange=0;
+        int jump=0;
+        int i=0;
+        while( maxRange<n-1){
+            int max=maxRange;
+            for(int j=0;j<=maxRange;j++){
+                if(max<nums[j]+j){
+                    max=nums[j]+j;
                 }
-                left=right+1;
-                right=farthest;
-                count++;
-
             }
-            return count;
-        }
+            maxRange=max;
+            jump++;
 
-
-    public int findJumps(int[] nums,int index,int[]dp){
-        if(index>=nums.length-1){
-            return 0;
         }
-        if(dp[index]<10000){
-            return dp[index];
-        }
-        int value=10000;
-
-        for(int i=1;i<=nums[index];i++){
-            value=Math.min(value,1+findJumps(nums,index+i,dp));
-        }
-        dp[index]=value;
-        return value;
+        return jump;
     }
+
 
     public static void main(String[] args) {
         JumpGameII solution = new JumpGameII();
 
-        System.out.println(solution.jump2(new int[]{3,4,3,2,5,4,3})); // 3
-        System.out.println(solution.jump2(new int[]{5,9,3,2,1,0,2,3,3,1,0,0})); // 3
-        System.out.println(solution.jump2(new int[]{2,1,1,1,1})); // 3
-        System.out.println(solution.jump2(new int[]{2,3,1,1,4})); // 2
-        System.out.println(solution.jump2(new int[]{2,3,0,1,4})); // 2
-        System.out.println(solution.jump2(new int[]{1,1,1,1}));   // 3
+        System.out.println(solution.jump(new int[]{7,0,9,6,9,6,1,7,9,0,1,2,9,0,3})); // 2
+        System.out.println(solution.jump(new int[]{5,9,3,2,1,0,2,3,3,1,0,0})); // 3
+        System.out.println(solution.jump(new int[]{2,1,1,1,1})); // 3
+        System.out.println(solution.jump(new int[]{2,3,1,1,4})); // 2
+        System.out.println(solution.jump(new int[]{2,3,0,1,4})); // 2
+        System.out.println(solution.jump(new int[]{1,1,1,1}));   // 3
     }
 
 }

@@ -13,16 +13,18 @@ public class MinimumNumberOfArrowsToBurstBalloons
                 return a[1]-b[1];
             return a[0]-b[0];
         });
-        int []can=points[0];
+        int start=points[0][0];
+        int end=points[0][1];
         int count=1;
         for(int i=1;i<n;i++){
             int []curr= points[i];
-            if(curr[0]>=can[0] && curr[0]<=can[1]){
-
+            if(curr[0]>=start && curr[0]<=end){
+                start=Math.max(start,curr[0]);
             }
             else{
                 count++;
-                can=curr;
+                 start=curr[0];
+                 end=curr[1];
             }
         }
         return count;
