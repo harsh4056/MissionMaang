@@ -18,8 +18,10 @@ public class MinimumNumberOfArrowsToBurstBalloons
         int count=1;
         for(int i=1;i<n;i++){
             int []curr= points[i];
+
             if(curr[0]>=start && curr[0]<=end){
                 start=Math.max(start,curr[0]);
+
             }
             else{
                 count++;
