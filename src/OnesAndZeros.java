@@ -2,36 +2,26 @@ import java.util.Arrays;
 
 public class OnesAndZeros {
     public int findMaxForm(String[] strs, int m, int n) {
-        int[][][]memo= new int[strs.length][n+1][m+1];
-        for (int[][] ints : memo) {
+        int[][][]dp=new int[m+1][n+1][strs.length];
+        for (int[][] ints : dp) {
             for (int[] anInt : ints) {
                 Arrays.fill(anInt,-1);
             }
         }
-        dfs(strs,memo,n,m,0);
-        return memo[0][n][m];
+        return dfs(strs,m,n,0,dp);
     }
 
-    public int dfs(String[] strs,int[][][] memo, int ones, int zeros,int index){
-
-        if( index>= strs.length){
+    public int dfs(String[] strs, int m, int n, int index,int[][][]dp){
+        if(index>=strs.length){
             return 0;
         }
-        if(memo[index][ones][zeros]!=-1){
-            return memo[index][ones][zeros];
-        }
-        int[] count=countZeros(strs[index]);
-
-
-        int use = 0;
-        if (zeros >= count[0] && ones >= count[1]) {
-            use = 1 +dfs(strs,memo,ones-count[1],zeros-count[0],index+1);
-        }
-        int skip = dfs(strs,memo,ones,zeros,index+1);
-
-
-        return memo[index][ones][zeros]=Math.max(use,skip);
-
+        if(dp[m][n][index]!=-1) return dp[m][n][index];
+        int []count=countZeros(strs[index]);
+        int take=0;
+        if(m-count[0]>=0 && n-count[1]>=0)
+         take=1+dfs(strs,m-count[0],n-count[1],index+1,dp);
+        int skip=dfs(strs,m,n,index+1,dp);
+        return dp[m][n][index]=Math.max(take,skip);
     }
 
     public int[] countZeros(String binary){
@@ -41,6 +31,16 @@ public class OnesAndZeros {
             count[c-'0']++;
         }
         return count;
+    }
+
+    public int findMaxForm2(String[] strs, int m, int n) {
+        int[][][]dp=new int[m+1][n+1][strs.length];
+        for (int[][] ints : dp) {
+            for (int[] anInt : ints) {
+                Arrays.fill(anInt,-1);
+            }
+        }
+        return dfs(strs,m,n,0,dp);
     }
 
     public static void main(String[] args) {
