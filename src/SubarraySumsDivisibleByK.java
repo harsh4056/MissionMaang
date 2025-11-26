@@ -4,20 +4,20 @@ import java.util.Map;
 public class SubarraySumsDivisibleByK {
 
     public int subarraysDivByK(int[] nums, int k) {
-        Map<Integer, Integer> modMap = new HashMap<>();
-        modMap.put(0, 1);
-
-        int sum = 0, count = 0;
-
-        for (int num : nums) {
-            sum += num;
-            int mod = ((sum % k) + k) % k;  // handle negative values
-
-            count += modMap.getOrDefault(mod, 0);
-            modMap.put(mod, modMap.getOrDefault(mod, 0) + 1);
+        HashMap<Integer,Integer> map= new HashMap<>();
+        map.put(0,1);
+        int sum=0;
+        int count=0;
+        for(int num:nums){
+            sum+=num;
+            int modded=((sum%k)+k)%k;
+            if(map.containsKey(modded)){
+                count+=map.get(modded);
+            }
+            map.put(modded,map.getOrDefault(modded,0)+1);
         }
-
         return count;
+
     }
 
 
@@ -35,8 +35,8 @@ public class SubarraySumsDivisibleByK {
     public static void main(String[] args) {
 
         // Test Case 1
-        int[] nums1 = {4, 5, 0, -2, -3, 1};
-        int k1 = 5;
+        int[] nums1 = {-1,2,9};
+        int k1 = 2;
         printResult(nums1, k1);  // Expected Output: 7
 
         // Test Case 2
