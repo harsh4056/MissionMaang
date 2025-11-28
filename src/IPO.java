@@ -11,7 +11,7 @@ public class IPO {
         PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder()); // now max heap
         PriorityQueue<int[]> minHeap = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));  // now max heap
 
-
+        
         // Push the first k pairs (nums1[i], nums2[0]) into the heap
         for (int i = 0; i < profits.length; i++) {
             minHeap.offer(new int[]{capital[i] , i});
