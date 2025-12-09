@@ -1,33 +1,52 @@
 public class CountSubMatricesWithAllOnes {
 
     public int numSubmat(int[][] mat) {
-        int rows = mat.length;
-        int cols = mat[0].length;
-        int[][] nums = new int[rows][cols];
-        int total = 0;
+        int m = mat.length, n = mat[0].length;
+        int[] height = new int[n];
+        int res = 0;
 
-        // Step 1: Build histogram heights
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                if (mat[i][j] == 0) {
-                    nums[i][j] = 0;
-                } else {
-                    nums[i][j] = (i == 0 ? 1 : nums[i - 1][j] + 1);
+        for (int i = 0; i < m; i++) {
+
+            for (int j = 0; j < n; j++) {
+
+                // update height
+                height[j] = mat[i][j] == 0 ? 0 : height[j] + 1;
+
+                System.out.println("i=" + i + " j=" + j +
+                        " height[j]=" + height[j] +
+                        " res(before inner)=" + res);
+
+                for (int k = j, min = height[j]; k >= 0 && min > 0; k--) {
+
+                    int beforeMin = min;
+                    int hk = height[k];
+
+                    min = Math.min(min, hk);
+
+                    System.out.println(
+                            "    i=" + i +
+                                    " j=" + j +
+                                    " k=" + k +
+                                    " height[j]=" + height[j] +
+                                    " height[k]=" + hk +
+                                    " min(before)=" + beforeMin +
+                                    " min(after)=" + min +
+                                    " res(before add)=" + res
+                    );
+
+                    res += min;
+
+                    System.out.println(
+                            "    res(after add)=" + res
+                    );
                 }
+
+                System.out.println("-----------------------------");
             }
         }
 
-        // Step 2: For each row, count rectangles ending at this row
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                int minHeight = Integer.MAX_VALUE;
-                for (int k = j; k < cols; k++) {
-                    minHeight = Math.min(minHeight, nums[i][k]);
-                    total += minHeight; // add contribution
-                }
-            }
-        }
-        return total;
+        System.out.println("FINAL RESULT = " + res);
+        return res;
     }
 
     public static void main(String[] args) {
@@ -40,7 +59,7 @@ public class CountSubMatricesWithAllOnes {
         };
         System.out.println(sol.numSubmat(mat1)); // Expected: 13
 
-        int[][] mat2 = {
+  /*      int[][] mat2 = {
                 {1,1,1},
                 {1,1,1}
         };
@@ -51,7 +70,7 @@ public class CountSubMatricesWithAllOnes {
                 {1,1,1,1},
                 {0,1,1,1}
         };
-        System.out.println(sol.numSubmat(mat3)); // Expected: 24
+        System.out.println(sol.numSubmat(mat3)); // Expected: 24*/
     }
 
 }
