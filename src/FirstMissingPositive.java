@@ -1,20 +1,29 @@
 public class FirstMissingPositive {
 
     public int firstMissingPositive(int[] nums) {
-        boolean[]aux= new boolean[nums.length+1];
-        for(int num:nums){
-            if(num>0 &&num<aux.length){
-                aux[num]=true;
+        int n=nums.length;
+        for(int i=0;i<nums.length;i++){
+            nums[i]=nums[i]>n || nums[i]<=0?0:nums[i];
+        }
+        for (int i = 0; i < nums.length; i++) {
+            int temp=nums[i];
+
+        }
+        for(int i=0;i<n;i++){
+            if(nums[i]!=i+1){
+                return i+1;
             }
         }
-        for(int i=1;i<aux.length;i++){
-            if(!aux[i]) return i;
-        }
-        return aux.length;
+
+        return n+1;
     }
+
 
     public static void main(String[] args) {
         FirstMissingPositive soln = new FirstMissingPositive();
+
+        System.out.println(soln.firstMissingPositive(new int[]{1,2,6,3,5,4})); // Expected: 7
+        System.out.println(soln.firstMissingPositive(new int[]{1})); // Expected: 2
         // Single element - not smallest positive
         System.out.println(soln.firstMissingPositive(new int[]{2})); // Expected: 1
         // Basic test case
@@ -38,10 +47,11 @@ public class FirstMissingPositive {
         // Edge case: large gaps
         System.out.println(soln.firstMissingPositive(new int[]{7, 8, 9, 11, 12})); // Expected: 1
 
-        // Single element - already smallest positive
-        System.out.println(soln.firstMissingPositive(new int[]{1})); // Expected: 2
+
 
 
     }
+
+
 
 }
