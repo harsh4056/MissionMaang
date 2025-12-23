@@ -11,6 +11,15 @@ public class LongestIncreasingSubsequence {
         for (int[] ints : dp) {
             Arrays.fill(ints,-1);
         }
+
+
+        dp[0][0]=0;
+        for (int i=0;i<nums.length;i++){
+
+            for (int j = 0; j < nums.length; j++) {
+                //dp[i][j]= 1+Math.max()
+            }
+        }
         findLongest(nums,0,-1,dp);
         return dp[0][0];
     }
@@ -33,9 +42,44 @@ public class LongestIncreasingSubsequence {
 
     }
 
+    public int lengthOfLIS2(int[] nums) {
+
+        int n= nums.length;
+        int[] arr= new int[n];
+        int r=0;
+        arr[0]=nums[0];
+        for (int i = 1; i < arr.length; i++) {
+           if(nums[i]>arr[r]){
+               arr[++r]=nums[i];
+           }
+           else{
+            int index=   lowerBound(arr,r,nums[i]);
+            arr[index]=nums[i];
+           }
+
+        }
+        return r+1;
+
+
+
+    }
+    public int lowerBound(int []nums,int r,int target){
+        int l=0;
+        while(l<r){
+            int mid=l+(r-l)/2;
+            if(nums[mid]>=target){
+                r=mid;
+            }
+            else{
+                l=mid+1;
+            }
+        }
+        return l;
+    }
+
     public static void main(String[] args) {
         LongestIncreasingSubsequence longestIncreasingSubsequence= new LongestIncreasingSubsequence();
         System.out.println(
-        longestIncreasingSubsequence.lengthOfLIS(new int[]{10,9,2,5,3,7,101,18}));
+        longestIncreasingSubsequence.lengthOfLIS2(new int[]{10,9,2,5,3,7,101,18}));
     }
 }

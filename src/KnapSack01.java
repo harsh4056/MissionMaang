@@ -2,36 +2,64 @@ import java.util.Arrays;
 
 public class KnapSack01 {
 
-    int knapsack(int[] weights, int[] values, int W){
-            int[][]memo= new int[W+1][values.length+1];
-        for (int[] ints : memo) {
+    int knapsack1(int[] weights, int[] values, int W){
+            int[][]dp= new int[W+1][values.length+1];
+        for (int[] ints : dp) {
             Arrays.fill(ints,-1);
         }
 
-        int ans= maxValue(weights,values,weights.length-1,W,memo);
+        int ans= maxValue(weights,values,weights.length-1,W,dp);
         return ans;
 
     }
 
-    static int maxValue(int[] weight, int[] value, int index, int maxWeight, int[][] memo){
+    static int maxValue(int[] weight, int[] value, int index, int maxWeight, int[][] dp){
         if(index==0){
             if(weight[index]<=maxWeight)
                 return value[index];
             else return 0;
         }
-
-        if(memo[maxWeight][index]!=-1) {
-            return memo[maxWeight][index];
+        if(dp[maxWeight][index]!=-1) {
+            return dp[maxWeight][index];
         }
         int take=Integer.MIN_VALUE;
         if(weight[index]<=maxWeight) {
-            take = value[index] + maxValue(weight, value, index - 1, maxWeight - weight[index], memo);
+            take = value[index] + maxValue(weight, value, index - 1, maxWeight - weight[index], dp);
         }
-        int notTake= maxValue(weight,value,index-1,maxWeight, memo);
-        memo[maxWeight][index]=Math.max(take,notTake);
-        return memo[maxWeight][index];
+        int skip= maxValue(weight,value,index-1,maxWeight, dp);
+        return dp[maxWeight][index]=Math.max(take,skip);
+
 
     }
+
+    int knapsack(int[] weights, int[] values, int W){
+        int n = weights.length;
+        int[][] dp = new int[W + 1][n];
+
+        // base case: index = 0
+        for (int w = 0; w <= W; w++) {
+            if (weights[0] <= w)
+                dp[w][0] = values[0];
+            else
+                dp[w][0] = 0;
+        }
+
+        // fill table
+        for (int i = 1; i < n; i++) {
+            for (int w = 0; w <= W; w++) {
+                int skip = dp[w][i - 1];
+                int take = 0;
+                if (weights[i] <= w) {
+                    take = values[i] + dp[w - weights[i]][i - 1];
+                }
+                dp[w][i] = Math.max(take, skip);
+            }
+        }
+
+        return dp[W][n - 1];
+    }
+
+
 
     public static void main(String[] args) {
         KnapSack01 solution = new KnapSack01();

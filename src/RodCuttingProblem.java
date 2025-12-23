@@ -7,21 +7,11 @@ public class RodCuttingProblem {
             Arrays.fill(ints,-1);
         }
 
-        return findMaxCuts(price,price.length-1,price.length,dp);
+        return solve(price,price.length-1,price.length,dp);
 
     }
-    public static int findMaxCuts(int price[],int index,int target,int dp[][] ){
-            if(index==0){
-                return price[index]*target;
-            }
-            if(dp[index][target]!=-1) return dp[index][target];
-        int take=Integer.MIN_VALUE;
-        if(target>=(index+1)){
-            take=price[index]+findMaxCuts(price,index,target-(index+1),dp);
-        }
-        int notTake= findMaxCuts(price,index-1,target,dp);
-        dp[index][target]=Math.max(take,notTake);
-        return Math.max(take,notTake);
+    public static int solve(int price[], int index, int target, int dp[][] ){
+    return 0;
     }
     public static void main(String[] args) {
         // Test Case 1

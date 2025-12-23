@@ -9,39 +9,33 @@ public class MergeIntervals {
     Explanation: Since intervals [1,3] and [2,6] overlap, merge them into [1,6].*/
     public int[][] merge(int[][] intervals) {
 
-
-        Arrays.sort(intervals, Comparator.comparingInt(a->a[0]));
+        Arrays.sort(intervals,(a,b)->{
+            return a[0]-b[0];
+        });
+        int []can= intervals[0];
         int n=intervals.length;
-        int []prev= new int[]{intervals[0][0],intervals[0][1]};
         List<int[]> list= new ArrayList<>();
-        for(int i=1;i<n;i++){
-            int []interval=intervals[i];
-            if(interval[0]>=prev[0] && interval[0]<=prev[1]){
-                prev[0]=Math.min(prev[0],interval[0]);
-                prev[1]=Math.max(prev[1],interval[1]);
+        for(int i=0;i<n;i++){
+            int[]curr=intervals[i];
+            if(curr[0]<=can[1]){
+                can[1]=curr[1];
             }
             else{
-                list.add(prev);
-                prev=interval;
+                list.add(can);
+                can=curr;
+
+            }
+            if(i==n-1){
+                list.add(can);
             }
         }
-
-        int []interval=intervals[n-1];
-        if(interval[0]>=prev[0] && interval[0]<=prev[1]){
-            prev[0]=Math.min(prev[0],interval[0]);
-            prev[1]=Math.max(prev[1],interval[1]);
-            list.add(prev);
+        int[][]ans= new int[list.size()][2];
+        int i=0;
+        for(int[]arr:list){
+            ans[i++]=arr;
         }
-        else{
-            list.add(prev);
+        return ans;
 
-        }
-
-        int[][] answer= new int[list.size()][2];
-        for(int i=0;i<answer.length;i++){
-            answer[i]=list.get(i);
-        }
-        return answer;
 
     }
 
