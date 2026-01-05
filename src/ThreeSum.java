@@ -3,41 +3,44 @@ import java.util.*;
 
 public class ThreeSum {
     public List<List<Integer>> threeSum(int[] nums) {
-        List<List<Integer>> result=new ArrayList<>();
         Arrays.sort(nums);
         int n=nums.length;
-        for(int i=0;i<n-2;i++) {
-            if (i>0&&nums[i] == nums[i - 1])
+        List<List<Integer>> listList= new ArrayList<>();
+        for(int i=0;i<n;i++){
+        int target=-nums[i];
+        int left=i+1;
+        int right= nums.length-1;
+
+        while(left<right){
+
+            if(target==nums[left]+nums[right]){
+                List<Integer> list= new ArrayList<>();
+                list.add(-target);
+                list.add(nums[left]);
+                list.add(nums[right]);
+                listList.add(list);
+                while (left<n-1 && nums[left]==nums[left+1]){
+                    left++;
+                }
+                left++;
+
                 continue;
-            int target=-nums[i];
-            int left=i+1;
-            int right=n-1;
-            while(left< right){
-                if(nums[left]+nums[right]<target){
-                    left++;
-                }
-                else if(nums[left]+nums[right]>target){
-                    right--;
-                }
-                else{
-                    List<Integer> temp= new ArrayList<>();
-                    temp.add(nums[i]);
-                    temp.add(nums[left]);
-                    temp.add(nums[right]);
-                    result.add(temp);
 
-                    while (left < right && nums[left] == nums[left + 1]) left++;
-                    while (left < right && nums[right] == nums[right - 1]) right--;
-
-                    left++;
-                    right--;
-
-                }
             }
+            if(target<nums[left]+nums[right]){
+                right--;
+            }
+            else {
+                left++;
+            }
+        }
+        while (i<n-1 && nums[i]==nums[i+1]){
+            i++;
+        }
 
         }
 
-        return result;
+        return listList;
     }
 
 
@@ -47,8 +50,8 @@ public class ThreeSum {
 
     public static void main(String[] args) {
         ThreeSum sum= new ThreeSum();
-        System.out.println(
-        sum.threeSum(new int[]{-1,0,1,2,-1,-4}));
+        System.out.println(sum.threeSum(new int[]{0,0,0,0}));
+        System.out.println(sum.threeSum(new int[]{-1,0,1,2,-1}));
     }
 
 

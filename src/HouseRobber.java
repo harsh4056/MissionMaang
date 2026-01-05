@@ -1,29 +1,37 @@
+import java.util.Arrays;
+
 public class HouseRobber {
 
 
     public int rob(int[] nums) {
-        int n = nums.length;
-        if (n == 0) return 0;
-        if (n == 1) return nums[0];
-        if (n == 2) return Math.max(nums[0], nums[1]);
 
-        int a = 0;            // dp[i-3]
-        int b = nums[0];      // dp[i-2]
-        int c = nums[1];      // dp[i-1], though not strictly needed
-
-        for (int i = 2; i < n; i++) {
-            int current = Math.max(a, b) + nums[i];
-            a = b;
-            b = c;
-            c = current;
+        int n=nums.length;
+        int []dp= new int[n+2];
+        for(int i=n-1;i>=0;i--){
+            int take =nums[i]+dp[i+2];
+            int skip =dp[i+1];
+            dp[i]=Math.max(take,skip);
         }
+        return dp[0];
+    }
 
-        return Math.max(b, c);
+    public int rob2(int []nums){
+        int[]dp= new int[nums.length+1];
+        Arrays.fill(dp,-1);
+        return solve(nums,0,dp);
+
+    }
+    public int solve(int[]nums, int index, int[] dp){
+        if(index>= nums.length) return 0;
+        int take= nums[index]+solve(nums,index+2, dp);
+        int skip= solve(nums,index+1, dp);
+
+        return Math.max(take,skip);
     }
 
 
     public static void main(String[] args) {
         HouseRobber houseRobber=  new HouseRobber();
-        System.out.println(houseRobber.rob(new int[]{9,1,1,1,1,7 }));
+        System.out.println(houseRobber.rob2(new int[]{9,1,1,1,1,7 }));
     }
 }

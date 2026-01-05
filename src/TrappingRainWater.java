@@ -4,30 +4,30 @@ import java.util.*;
 public class TrappingRainWater {
 
     public int trap(int[] height) {
-        int n = height.length;
-        int[] nl = new int[n];
-        int largest=-1;
+        int n=height.length;
 
-        for (int i = 0; i < n; i++) {
-            nl[i]=largest;
-            largest=Math.max(largest,height[i]);
+
+        Stack<Integer> stack= new Stack<>();
+        for(int i=n-1;i>=0;i--){
+            if(stack.isEmpty()|| height[stack.peek()]<height[i])
+                stack.push(i);
         }
-        int[] pl = new int[n];
-        largest=-1;
-        for (int i = n - 1; i >= 0; i--) {
-            pl[i]=largest;
-            largest=Math.max(largest,height[i]);
-        }
-        int water = 0;
-        for (int i = 0; i < n; i++) {
-            if (pl[i] != -1 && nl[i] != -1) {
-                int h = Math.min(pl[i], nl[i]);
-                if(height[i]<h)
-                 water += h - height[i];
+        int ans=0;
+        int maxHeight=-1;
+        for(int i=0;i<n;i++){
+            if(height[i]<maxHeight){
+                while(!stack.empty() && stack.peek()<=i){
+                    stack.pop();
+                }
+                int left=maxHeight;
+                int right=stack.isEmpty()?-1:height[stack.peek()];
+                if(height[i]<left && height[i]<right){
+                    ans+=Math.min(left,right)-height[i];
+                }
             }
-
+            maxHeight=Math.max(maxHeight,height[i]);
         }
-        return water;
+        return ans;
     }
     public static void main(String[] args) {
         TrappingRainWater tr = new TrappingRainWater();

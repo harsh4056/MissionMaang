@@ -1,4 +1,9 @@
+import com.sun.source.tree.Tree;
+
 import java.util.Arrays;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.TreeMap;
 
 public class TwoBestNonOverlappingEvents {
 
@@ -48,6 +53,35 @@ public class TwoBestNonOverlappingEvents {
         return l;
     }
 
+    public int maxTwoEvents2(int[][] events) {
+        int n = events.length;
+        int maxi=-1;
+
+        PriorityQueue<int[]> minHeap= new PriorityQueue<>((a,b)->{
+            if(a[0]==b[0]) return a[1]-b[1];
+            return a[0]-b[0];
+        });
+        for (int[] event : events) {
+            minHeap.offer(new int[]{event[0],0,event[2]});
+            minHeap.offer(new int[]{event[1],1,event[2]});
+        }
+        int last=0;
+        while (!minHeap.isEmpty()){
+            int[]curr= minHeap.poll();
+            int time=curr[0];
+            int type=curr[1];
+            int value=curr[2];
+
+            if(type==1){
+                last=Math.max(last,value);
+            }
+            else {
+                maxi = Math.max(last + value, maxi);
+            }
+        }
+        return maxi;
+    }
+
     public static void main(String[] args) {
 
         TwoBestNonOverlappingEvents solution = new TwoBestNonOverlappingEvents();
@@ -59,7 +93,7 @@ public class TwoBestNonOverlappingEvents {
                 {2, 5, 3},
                 {2, 3, 4}
         };
-        System.out.println(solution.maxTwoEvents(events4));
+        System.out.println(solution.maxTwoEvents2(events4));
         // Expected output: 10
         // Example 1
         int[][] events1 = {
@@ -67,7 +101,7 @@ public class TwoBestNonOverlappingEvents {
                 {4, 5, 2},
                 {2, 4, 3}
         };
-        System.out.println(solution.maxTwoEvents(events1));
+        System.out.println(solution.maxTwoEvents2(events1));
         // Expected output: 4
 
         // Example 2
@@ -76,7 +110,7 @@ public class TwoBestNonOverlappingEvents {
                 {4, 5, 2},
                 {1, 5, 5}
         };
-        System.out.println(solution.maxTwoEvents(events2));
+        System.out.println(solution.maxTwoEvents2(events2));
         // Expected output: 5
 
         // Example 3
@@ -85,7 +119,7 @@ public class TwoBestNonOverlappingEvents {
                 {1, 5, 1},
                 {6, 6, 5}
         };
-        System.out.println(solution.maxTwoEvents(events3));
+        System.out.println(solution.maxTwoEvents2(events3));
         // Expected output: 8
 
 
