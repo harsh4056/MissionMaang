@@ -32,4 +32,9 @@ public class PermutationInString {
         }
         return false;
     }
+
+    public static void main(String[] args) {
+        PermutationInString soln= new PermutationInString();
+        System.out.println(soln.checkInclusion("abc","cccccbabbbaaaa"));
+    }
 }

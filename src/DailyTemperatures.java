@@ -4,25 +4,19 @@ public class DailyTemperatures {
 
 
     public int[] dailyTemperatures(int[] temperatures) {
-        IntStack monotonicStack= new IntStack(temperatures.length);
         int n=temperatures.length;
-        int []answer= new int[n];
-        for (int i = n-1; i >= 0; i--) {
-            int temperature = temperatures[i];
-            int count=0;
-            while (!monotonicStack.isEmpty() && temperatures[monotonicStack.peek()]<=temperature){
-                monotonicStack.pop();
+        int[] arr= new int[n];
+        Stack<Integer> stack= new Stack<>();
+        for(int i=n-1;i>=0;i--){
+            while(!stack.isEmpty() &&
+                    temperatures[stack.peek()]<=temperatures[i]){
+                stack.pop();
             }
-            if(!monotonicStack.isEmpty()){
-                answer[i]=monotonicStack.peek()-i;
-            }
-            else{
-                answer[i]=0;
-            }
+            arr[i]=stack.isEmpty()?0:stack.peek()-i;
+            stack.push(i);
 
-            monotonicStack.push(i);
         }
-        return answer;
+        return arr;
     }
     public class IntStack {
 
