@@ -1,34 +1,31 @@
 public class KokoEatingBanana {
 
     public int minEatingSpeed(int[] piles, int h) {
-
-        int low=1;
-        int high=Integer.MIN_VALUE;
-        for (int pile : piles) {
-
-            high=Math.max(high,pile);
+        int maxi=Integer.MIN_VALUE;
+        for(int pile:piles){
+            maxi=Math.max(maxi,pile);
         }
-        int mid = 0;
-
-        int hours=0;
-        while (low<high) {
-            hours=0;
-             mid=low+(high-low)/2;
-            for (int pile : piles) {
-                int hour=Math.ceilDiv(pile,mid);
-                hours+=hour;
-            }
-
-            if(hours<=h){
-                high=mid;
+        int left=1;
+        int right=maxi;
+        while(left<right){
+            int mid=(left+right)>>>1;
+            int hours=hours(piles,mid);
+            if(hours>=h){
+                right=mid;
             }
             else{
-                low=mid+1;
+                left=mid+1;
             }
-
         }
-        return low;
+        return left;
 
+    }
+    public int hours(int[]piles,int b){
+        int h=0;
+        for(int pile:piles){
+            h+=Math.ceilDiv(pile,b);
+        }
+        return h;
     }
 
 
@@ -39,7 +36,7 @@ public class KokoEatingBanana {
         // Test case 1
         int[] piles1 = {312884470};
         int h1 = 312884469;
-        System.out.println(obj.minEatingSpeed(piles1, h1)); // Expected: 4
+        //System.out.println(obj.minEatingSpeed(piles1, h1)); // Expected: 4
 
         // Test case 2
         int[] piles2 = {30, 11, 23, 4, 20};

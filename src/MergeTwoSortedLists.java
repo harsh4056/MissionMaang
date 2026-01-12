@@ -11,26 +11,31 @@ list2: 1 → 3 → 4
     *
     * */
     public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
-
-
-
-        ListNode dummyNode=new ListNode(-101);
-        ListNode mergedHead=dummyNode;
-        while(list2!=null || list1!=null){
-            ListNode temp;
-            if(list2 == null  ||  list1!=null && list1.val < list2.val ){
-                temp = list1;
-              list1=list1.next;
+        ListNode curr1 = list1;
+        ListNode curr2 = list2;
+        ListNode dummy = new ListNode(-101);
+        ListNode node = dummy;
+        while (curr1 != null && curr2 != null) {
+            if (curr1.val < curr2.val) {
+                node.next = curr1;
+                curr1 = curr1.next;
+            } else {
+                node.next = curr2;
+                curr2 = curr2.next;
             }
-          else{
-                temp = list2;
-              list2=list2.next;
-            }
-            dummyNode.next=temp;
-          dummyNode=dummyNode.next;
+            node = node.next;
         }
-
-        return mergedHead.next;
+        while (curr1 != null) {
+            node.next = curr1;
+            curr1 = curr1.next;
+            node = node.next;
+        }
+        while (curr2 != null) {
+            node.next = curr2;
+            curr2 = curr2.next;
+            node = node.next;
+        }
+        return dummy.next;
     }
 
     // Helper method to create linked list from array
@@ -62,8 +67,8 @@ list2: 1 → 3 → 4
     public static void main(String[] args) {
         MergeTwoSortedLists solution = new MergeTwoSortedLists();
 
-        int[] arr1 = {1, 2, 4};
-        int[] arr2 = {1,3,4,5};
+        int[] arr1 = {};
+        int[] arr2 = {1,2};
 
         ListNode list1 = createList(arr1);
         ListNode list2 = createList(arr2);

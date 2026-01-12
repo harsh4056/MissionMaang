@@ -1,59 +1,78 @@
 import java.util.ArrayDeque;
 import java.util.Deque;
+import java.util.Stack;
 
 public class MaximalRectangle {
 
 
 
+
+
     public int maximalRectangle(char[][] matrix) {
-        int[] heights= new int[matrix[0].length];
-        int maxArea = 0;
+        int n = matrix[0].length;
+        int[] heights = new int[n];
+        int maxi = -1;
         for (int i = 0; i < matrix.length; i++) {
-            for (int j = 0; j < matrix[0].length; j++) {
-                if (matrix[i][j] == '1') heights[j]++;
-                else  heights[j] = 0;
-
-            }
-
-            int n = heights.length;
-            int[] prevSmaller = new int[n], nextSmaller = new int[n];
-            Deque<Integer> st = new ArrayDeque<>();
-
-            // compute prevSmaller: index of first strictly smaller bar to the left
-            for (int k = 0; k < n; k++) {
-                while (!st.isEmpty() && heights[st.peek()] >= heights[k]) {
-                    st.pop();
+            if (i == 0) {
+                for (int j = 0; j < n; j++) {
+                    heights[j] = matrix[i][j] - '0';
                 }
-                prevSmaller[k] = st.isEmpty() ? -1 : st.peek();
-                st.push(k);
-            }
+            } else {
+                for (int j = 0; j < n; j++) {
+                    int curr = matrix[i][j] - '0';
+                    if (heights[j] >= 1 && curr == 1) {
+                        heights[j]++;
+                    } else {
+                        heights[j] = curr;
+                    }
 
-            // compute nextSmaller: index of first strictly smaller bar to the right
-            st.clear();
-            for (int k = n - 1; k >= 0; k--) {
-                while (!st.isEmpty() && heights[st.peek()] >= heights[k]) {
-                    st.pop();
                 }
-                nextSmaller[k] = st.isEmpty() ? n : st.peek();
-                st.push(k);
+
             }
+            int h = largestRectangleArea(heights);
+            maxi = Math.max(maxi, h);
+        }
+        return maxi;
 
-            // compute max area
+    }
 
-            for (int k = 0; k < n; k++) {
-                int width = nextSmaller[k] - prevSmaller[k] - 1;
-
-                int area = heights[k] * width;
-                if (area > maxArea) maxArea = area;
+    public int largestRectangleArea(int[] heights) {
+        Stack<Integer> stack = new Stack<>();
+        int n = heights.length;
+        int maxi = -1;
+        for (int i = 0; i < heights.length; i++) {
+            int height = heights[i];
+            while (!stack.isEmpty() && heights[stack.peek()] > height) {
+                int curr = stack.pop();
+                int pse = stack.isEmpty() ? -1 : stack.peek();
+                int nse = i;
+                int area = heights[curr] * (nse - pse - 1);
+                maxi = Math.max(maxi, area);
             }
+            stack.push(i);
         }
 
-        return maxArea;
+        while (!stack.isEmpty()) {
+            int curr = stack.pop();
+            int pse = stack.isEmpty() ? -1 : stack.peek();
+            int nse = n;
+            int area = heights[curr] * (nse - pse - 1);
+            maxi = Math.max(maxi, area);
+        }
+        return maxi;
     }
 
 
     public static void main(String[] args) {
         MaximalRectangle mr = new MaximalRectangle();
+
+
+        char[][] matrix3 = {
+                {'1'}
+        };
+        System.out.println(mr.maximalRectangle(matrix3));
+        // Expected: 1
+
         char[][] matrix1 = {
                 {'1','0','1','0','0'},
                 {'1','0','1','1','1'},
@@ -69,11 +88,6 @@ public class MaximalRectangle {
         System.out.println(mr.maximalRectangle(matrix2));
         // Expected: 0
 
-        char[][] matrix3 = {
-                {'1'}
-        };
-        System.out.println(mr.maximalRectangle(matrix3));
-        // Expected: 1
     }
 
 }
