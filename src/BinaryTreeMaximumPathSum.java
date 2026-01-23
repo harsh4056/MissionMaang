@@ -1,25 +1,21 @@
 public class BinaryTreeMaximumPathSum {
 
+    int ans=Integer.MIN_VALUE;
     public int maxPathSum(TreeNode root) {
-        dfs(root);
-        return max;
+        solve(root);
+        return ans;
     }
-    int max = Integer.MIN_VALUE;  // global variable to store the result
 
+    public int solve(TreeNode root){
+        if(root==null) return 0;
+        int left=solve(root.left);
+        int right=solve(root.right);
 
+        ans=Math.max(ans,root.val+left+right);
 
-    private int dfs(TreeNode node) {
-        if (node == null) return 0;
+        int temp= Math.max(left,right);
+        return Math.max(temp+ root.val,0);
 
-        int left = dfs(node.left);
-        int right = dfs(node.right);
-
-        int leftPath = Math.max(0, left) + node.val;
-        int rightPath = Math.max(0, right) + node.val;
-
-        max = Math.max(max, leftPath + rightPath - node.val);
-
-        return Math.max(leftPath, rightPath);
     }
 
 
@@ -28,9 +24,9 @@ public class BinaryTreeMaximumPathSum {
         BinaryTreeMaximumPathSum obj = new BinaryTreeMaximumPathSum();
 
         // Test case 1: Simple tree
-        TreeNode root1 = new TreeNode(1);
-        root1.left = new TreeNode(2);
-        root1.right = new TreeNode(3);
+        TreeNode root1 = new TreeNode(2);
+        root1.left = new TreeNode(-1);
+
         System.out.println("Test Case 1: " + obj.maxPathSum(root1));
 
         // Test case 2: Tree with negative values

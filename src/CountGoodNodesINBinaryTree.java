@@ -1,24 +1,19 @@
 public class CountGoodNodesINBinaryTree {
-
     int count=0;
     public int goodNodes(TreeNode root) {
-        count=0;
-        dfs(root,root.val);
+
+        solve(root,-101);
         return count;
-    }
-
-    public void dfs(TreeNode root,int maxSoFar){
-        if(root==null)
-            return;
-
-        if(maxSoFar<=root.val){
-            count++;
-            maxSoFar=root.val;
-        }
-        dfs(root.left,maxSoFar);
-        dfs(root.right,maxSoFar);
 
     }
+
+    public void solve(TreeNode root,int prev){
+        if(root==null) return;
+        if(root.val>prev) count++;
+        solve(root.left,Math.max(prev,root.val));
+        solve(root.right,Math.max(prev,root.val));
+    }
+
 
     public static void main(String[] args) {
         // Test case 1: Tree: [3,1,4,3,null,1,5]

@@ -4,73 +4,71 @@ public class ReverseNodesInKGroup {
 
 
     public ListNode reverseKGroup(ListNode head, int k) {
+        if(k==1) return head;
+        ListNode[]list=null;
+        int c=1;
+        ListNode curr=head;
+        while(c<k){
+            curr=curr.next;
+            c++;
+        }
+        ListNode nHead=head;
+        if(c==k) nHead=curr;
+        curr=head;
+        ListNode lastEnd=null;
 
-        ListNode dummy=new ListNode(-101);
-        ListNode zeroHead=dummy;
-        dummy.next=head;
-        while(zeroHead!=null){
-            int count=k;
-            ListNode current=zeroHead.next;
-            while (current!=null && count>0){
-                current=current.next;
-                count--;
+        while (canReverse(curr,k)){
+           list= reverseK(curr,k);
+           if(lastEnd!=null)
+            lastEnd.next=list[1];
+           lastEnd=list[0];
+           curr=list[2];
+        }
+        if(lastEnd!=null)
+         lastEnd.next=curr;
 
+
+        return nHead;
+    }
+    public boolean canReverse(ListNode head,int k){
+        int c=0;
+        ListNode curr=head;
+        while(c<k && curr!=null){
+            curr=curr.next;
+            c++;
+        }
+        return c==k;
+    }
+    public ListNode[] reverseK(ListNode head,int k){
+        int c=0;
+        ListNode curr=head;
+        ListNode[] arr= new ListNode[3];
+        arr[0]=curr;
+        ListNode prev=null;
+        while(c<k){
+            ListNode temp=curr.next;
+            curr.next=prev;
+            prev=curr;
+            curr=temp;
+
+            c++;
+            if(c==k-1){
+                arr[1]=curr;
             }
-            if(count>0){
-                return dummy.next;
-            }
-
-            Pair nodes= reverseList(zeroHead.next,k);
-            ListNode temp=zeroHead.next;
-            zeroHead.next.next=nodes.end;
-            zeroHead.next=nodes.start;
-            zeroHead=temp;
-
-
         }
-
-
-        return  dummy.next;
-
-
+        arr[2]=curr;
+        return arr;
     }
 
-    public Pair reverseList(ListNode head,int length){
-        ListNode current=head;
-        ListNode forward;
-        ListNode previous=null;
 
-        while (length>1){
-            forward=current.next;
-            current.next=previous;
-            previous=current;
-            current=forward;
-            length--;
-        }
-        ListNode end=current.next;
-        current.next=previous;
-
-        head=current;
-        return new Pair(head,end);
-    }
-
-    class Pair{
-        ListNode start;
-        ListNode end;
-
-        public Pair(ListNode start, ListNode end) {
-            this.start = start;
-            this.end = end;
-        }
-    }
     public static void main(String[] args) {
         ReverseNodesInKGroup solution = new ReverseNodesInKGroup();
 
         // Create a test list: 1 -> 2 -> 3 -> 3 -> 4 -> 4 -> 5
-        ListNode head = createList(new int[]{1,2,3,4,5,6});
+        ListNode head = createList(new int[]{1,2,3,4,5,6,7,8,9});
 
         // Apply the method
-        ListNode newHead = solution.reverseKGroup(head,3);
+        ListNode newHead = solution.reverseKGroup(head,2 );
 
         // Print the result
         printList(newHead);

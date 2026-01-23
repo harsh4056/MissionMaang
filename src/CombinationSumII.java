@@ -2,40 +2,52 @@ import java.util.*;
 
 public class CombinationSumII {
 
+    List<List<Integer>> answer;
     public List<List<Integer>> combinationSum2(int[] candidates, int target) {
-        Set<List<Integer>> set = new HashSet<>();
         Arrays.sort(candidates);
-        findCombinations(candidates,target,set,new ArrayList<>(),0);
-        List<List<Integer>> answer= set.stream().toList();
+        int n=candidates.length;
+        int[]nextIndex= new int[n];
+        for(int i=0;i<n;i++){
+            int l=i+1;
+            int r=n;
+            int curr=candidates[i];
+            while(l<r){
+                int mid=(l+r)>>>1;
+                if(candidates[mid]>curr){
+                    r=mid;
+                }
+                else{
+                    l=mid+1;
+                }
+            }
+            nextIndex[i]=l;
+        }
+        answer= new ArrayList<>();
+        solve(candidates,nextIndex,0,target,new ArrayList<>());
         return answer;
     }
 
-    public void findCombinations(int[] candidates, int target, Set<List<Integer>> set,List<Integer> list,int i){
 
-        if(i>=candidates.length || target<0){
+    public void solve(int[]nums,int[]next,int index,int target,List<Integer> list){
+        if(target==0){
+            answer.add(new ArrayList<>(list));
             return;
-        }if(target==0){
-            set.add(new ArrayList<>(list));
+        }
+        if(index==nums.length|| target<0){
             return;
         }
 
-        for (int j = i; j < candidates.length; j++) {
 
-            if(j>i && candidates[j]== candidates[j-1])
-                continue;
-
-            int candidate = candidates[j];
-            list.add(candidate);
-            findCombinations(candidates,target-candidate,set,list,j+1);
-            list.removeLast();
-
-        }
+        list.add(nums[index]);
+        solve(nums,next,index+1,target-nums[index],list);
+        list.removeLast();
+        solve(nums,next,next[index],target,list);
 
     }
-
     public static void main(String[] args) {
         CombinationSumII solution = new CombinationSumII();
-
+        StringBuilder sb= new StringBuilder();
+        
         // Test case 1
         int[] candidates1 = {10,1,2,7,6,1,5};
         int target1 = 8;

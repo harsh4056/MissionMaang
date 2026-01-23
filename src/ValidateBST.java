@@ -2,22 +2,14 @@ public class ValidateBST {
     boolean result=true;
     long prev= Long.MIN_VALUE;
     public boolean isValidBST(TreeNode root) {
-         result=true;
-         findOut(root);
-         return result;
 
+        return solve(root,Integer.MIN_VALUE,Integer.MAX_VALUE);
     }
-    public void findOut(TreeNode root){
-        if(root==null) return ;
-        if(!result) return;
-        findOut(root.left);
-        if(prev<root.val){
-            prev=root.val;
-        }else{
-            result=false;
-        }
-        findOut(root.right);
 
+    public boolean solve(TreeNode root,int min,int max){
+
+        if(root==null) return true;
+        return min < root.val && root.val < max && solve(root.left, min, root.val) && solve(root.right, Math.max(min, root.val), max);
     }
 
     public static void main(String[] args) {
@@ -27,7 +19,7 @@ public class ValidateBST {
         TreeNode root1 = new TreeNode(1);
         root1.left = new TreeNode(2);
         root1.right = new TreeNode(3);
-        //System.out.println(solution.isValidBST(root1)); // Expected: true
+        System.out.println(solution.isValidBST(root1)); // Expected: true
 
         // Test case 2: Invalid BST (from given example [5,4,6,null,null,3,7])
         TreeNode root2 = new TreeNode(5);

@@ -7,22 +7,20 @@ import java.util.List;
 public class LowestCommonAncestor {
 
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        return dfs(root, p, q);
-    }
-
-    private TreeNode dfs(TreeNode root, TreeNode p, TreeNode q) {
-        if (root == null) return null;
-
-        if (root == p || root == q) return root;
-
-        TreeNode left = dfs(root.left, p, q);
-        TreeNode right = dfs(root.right, p, q);
-
-        if (left != null && right != null) {
-            return root; // p and q found in different subtrees
+        if(root==null) return null;
+        if(root==p || root==q){
+            return root;
+        }
+        TreeNode left=lowestCommonAncestor(root.left,p,q);
+        TreeNode right=lowestCommonAncestor(root.right,p,q);
+        if(left!=null && right!=null){
+            return root;
+        }
+        else{
+            if(left==null) return right;
+            return left;
         }
 
-        return left != null ? left : right;
     }
 
 

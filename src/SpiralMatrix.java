@@ -3,94 +3,45 @@ import java.util.List;
 
 public class SpiralMatrix {
     public List<Integer> spiralOrder(int[][] matrix) {
-        List<Integer> list = new ArrayList<>();
-        if (matrix == null || matrix.length == 0) return list;
-
-        int verticalStart   = 0;
-        int verticalEnd     = matrix.length;
-        int horizontalStart = 0;
-        int horizontalEnd   = matrix[0].length;
-
-        while (horizontalStart < horizontalEnd
-                && verticalStart   < verticalEnd) {
-
-            // 1) top row, left→right
-            for (int col = horizontalStart; col < horizontalEnd; col++) {
-                list.add(matrix[verticalStart][col]);
+        int n=matrix.length;
+        int m=matrix[0].length;
+        int t=0;
+        int b=n-1;
+        int l=0;
+        int r=m-1;
+        int count=n*m;
+        List<Integer> list= new ArrayList<>();
+        while(count>0){
+            for(int i=l;i<=r && count>0;i++){
+                list.add(matrix[t][i]);
+                count--;
             }
-            verticalStart++;
+            t++;
 
-            // 2) right column, top→bottom
-            for (int row = verticalStart; row < verticalEnd; row++) {
-                list.add(matrix[row][horizontalEnd - 1]);
+            for(int i=t;i<=b&& count>0;i++){
+                list.add(matrix[i][r]);
+                count--;
             }
-            horizontalEnd--;
+            r--;
 
-            // 3) bottom row, right→left (if still valid)
-            if (verticalStart < verticalEnd) {
-                for (int col = horizontalEnd - 1; col >= horizontalStart; col--) {
-                    list.add(matrix[verticalEnd - 1][col]);
-                }
-                verticalEnd--;
+            for(int i=r;i>=l&& count>0;i--){
+                list.add(matrix[b][i]);
+                count--;
             }
+            b--;
 
-            // 4) left column, bottom→top (if still valid)
-            if (horizontalStart < horizontalEnd) {
-                for (int row = verticalEnd - 1; row >= verticalStart; row--) {
-                    list.add(matrix[row][horizontalStart]);
-                }
-                horizontalStart++;
+            for(int i=b;i>=t&& count>0;i--){
+                list.add(matrix[i][l]);
+                count--;
             }
+            l++;
+
+
         }
-
         return list;
     }
 
-    /*
-*
-* public List<Integer> spiralOrder(int[][] matrix) {
-    List<Integer> result = new ArrayList<>();
-    int m = matrix.length;
-    int n = matrix[0].length;
 
-    int top = 0, bottom = m - 1;
-    int left = 0, right = n - 1;
-
-    while (top <= bottom && left <= right) {
-
-        // Traverse top row
-        for (int j = left; j <= right; j++) {
-            result.add(matrix[top][j]);
-        }
-        top++;
-
-        // Traverse right column
-        for (int i = top; i <= bottom; i++) {
-            result.add(matrix[i][right]);
-        }
-        right--;
-
-        // Traverse bottom row (if still within bounds)
-        if (top <= bottom) {
-            for (int j = right; j >= left; j--) {
-                result.add(matrix[bottom][j]);
-            }
-            bottom--;
-        }
-
-        // Traverse left column (if still within bounds)
-        if (left <= right) {
-            for (int i = bottom; i >= top; i--) {
-                result.add(matrix[i][left]);
-            }
-            left++;
-        }
-    }
-
-    return result;
-}
-
-* */
     public static void main(String[] args) {
         int[][] matrix5 = {
                 { 1,  2,  3,  4,  5},

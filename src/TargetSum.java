@@ -1,18 +1,14 @@
 public class TargetSum {
-
     public int findTargetSumWays(int[] nums, int target) {
-
-        return find(nums,target,0);
+        return solve(nums,target,0);
     }
-
-    public int find(int[] nums, int target,int index){
-        if(index>=nums.length){
-            if(target==0)
-                return 1;
+    public int solve(int[]nums,int target,int index){
+        if(index==nums.length){
+            if(target==0) return 1;
             else return 0;
         }
-
-       return   find(nums,-nums[index]+target,index+1)+find(nums,nums[index]+target,index+1);
+        return solve(nums,target-nums[index],index+1) +
+                solve(nums,target+nums[index],index+1);
     }
 
     public static void main(String[] args) {

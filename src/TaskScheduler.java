@@ -3,39 +3,41 @@ import java.util.*;
 public class TaskScheduler {
 
     public int leastInterval(char[] tasks, int n) {
-        int[] freq = new int[26];
-        for (char t : tasks) freq[t - 'A']++;
+        int[][]freq= new int[26][2];
+        for(int task:tasks){
+            freq[task-'A'][0]++;
+        }
+        int i;
+        for(i=0;i<100000;i++){
 
-        PriorityQueue<Integer> maxHeap = new PriorityQueue<>(Collections.reverseOrder());
-        for (int f : freq) if (f > 0) maxHeap.offer(f);
+            int winner=Integer.MAX_VALUE;
+            for(int[]f:freq){
+                if(f[0]>0 && f[1]<=i){
 
-        int intervals = 0;
-        while (!maxHeap.isEmpty()) {
-            List<Integer> temp = new ArrayList<>();
-            // Try to fill up to n+1 slots this round
-            for (int i = 0; i <= n; i++) {
-                if (!maxHeap.isEmpty()) {
-                    int cnt = maxHeap.poll();
-                    if (--cnt > 0) temp.add(cnt);
-                    intervals++;
-                } else if (temp.isEmpty()) {
-                    // No tasks left to schedule and no waiting tasks → we're done
+                    f[0]--;
+                    f[1]=i+n;
                     break;
-                } else {
-                    // Idle slot
-                    intervals++;
+                }
+                else {
+                    winner=Math.min(winner,f[1]);
                 }
             }
-            // Push remaining counts back into heap
-            for (int cnt : temp) maxHeap.offer(cnt);
+            if(winner>=i && winner!=Integer.MAX_VALUE)
+             i=winner;
+
+
         }
-        return intervals;
+        int ans=0;
+        for(int[]f:freq){
+             ans=Math.max(ans,f[1]);
+
+        }
+        return ans-1;
     }
 
 
     public static void main(String[] args) {
         TaskScheduler scheduler = new TaskScheduler();
-
         // Example 1:
         char[] tasks1 = {'A','A','A','B','B','B'};
         int n1 = 2;

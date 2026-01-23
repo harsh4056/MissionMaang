@@ -3,19 +3,16 @@ public class BalancedBinaryTree {
 
 
     public boolean isBalanced(TreeNode root) {
-        if(root==null)
-            return true;
-
-        int left=height(root.left);
-        int right=height(root.right);
-        return Math.abs(right-left)<=1 && isBalanced(root.left) && isBalanced(root.right);
+        int height=getHeight(root);
+        return height!=Integer.MAX_VALUE;
     }
-
-    public int height(TreeNode root){
-        if(root==null)
-            return 0;
-
-        return Math.max(height(root.left),height(root.right))+1;
+    public int getHeight(TreeNode root){
+        if(root==null) return 0;
+        int left=getHeight(root.left);
+        int right=getHeight(root.right);
+        if(Math.abs(right-left)>1) return Integer.MAX_VALUE;
+        if(left==Integer.MAX_VALUE || right==Integer.MAX_VALUE) return Integer.MAX_VALUE;
+        return 1+Math.max(left,right);
     }
 
     public static void main(String[] args) {

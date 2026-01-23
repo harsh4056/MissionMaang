@@ -1,42 +1,51 @@
-import java.util.Arrays;
+import java.util.*;
 import java.util.HashMap;
 
 public class HandOfStraights {
     public boolean isNStraightHand(int[] hand, int groupSize) {
-        int n=hand.length;
-        if(n%groupSize!=0) return false;
-        Arrays.sort(hand);
-        HashMap<Integer,Integer> map= new HashMap<>();
-        for (int num:hand){
-            map.put(num,map.getOrDefault(num,0)+1);
+        TreeMap<Integer,Integer> map = new TreeMap<>();
+
+        for(int h:hand){
+            map.putIfAbsent(h,0);
+            map.put(h,map.get(h)+1);
         }
-        int i=0;
-        while(i<n){
-            int curr=hand[i];
-            for (int j = curr; j < curr + groupSize; j++) {
-                if(map.getOrDefault(j,0)>0){
-                    map.put(j,map.getOrDefault(j,0)-1);
-                    if(map.getOrDefault(j,0)==0){
-                        while(i<n&& hand[i]==j){
-                            i++;
-                        }
+
+        while(!map.isEmpty()){
+            int size=groupSize;
+            int start=map.firstKey()-1;
+            while(size>0){
+                Integer first= map.higherKey(start);
+                if(first==null) return false;
+                if(start+1==first) {
+                    int count= map.get(first);
+                    count--;
+                    if(count==0){
+                        map.remove(first);
+
                     }
+                    else{
+                        map.put(first,count);
+                    }
+                    start=first;
+
                 }
-                else {
+                else{
                     return false;
                 }
+                size--;
             }
+
         }
         return true;
     }
     public static void main(String[] args) {
         HandOfStraights obj = new HandOfStraights();
 
-        int[] hand1 = {1,2,3,6,2,3,4,7,8};
-        int groupSize1 = 3;
+        int[] hand1 = {1,2,4,2,3,5,3,4};
+        int groupSize1 = 4;
         System.out.println(obj.isNStraightHand(hand1, groupSize1)); // Expected: true
 
-        int[] hand2 = {1,2,3,4,5};
+        int[] hand2 = {1,2,3,4,5,6,7,8,9};
         int groupSize2 = 4;
         System.out.println(obj.isNStraightHand(hand2, groupSize2)); // Expected: false
 

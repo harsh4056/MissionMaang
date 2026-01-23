@@ -5,27 +5,41 @@ import java.util.PriorityQueue;
 public class MergeKSortedLists {
 
     public ListNode mergeKLists(ListNode[] lists) {
+        ListNode dummy=new ListNode(-1001);
+        int index=0;
+        int val=-1001;
+        ListNode progress=dummy;
 
-        PriorityQueue<ListNode> minHeap = new PriorityQueue<>(Comparator.comparingInt(a -> a.val));
-        for (ListNode list : lists) {
-            if(list!=null) {
-                minHeap.offer(list);
+        while(true){
+            int count=0;
+            index=-1;
+            val=1001;
+            ListNode winner=null;
+            for(int i=0;i<lists.length;i++){
+                if(lists[i]==null){
+                    count++;
+                    continue;
+                }
+                if(val>lists[i].val){
+                    if(index!=-1){
+                        winner.next=lists[index];
+                        lists[index]=winner;
+                    }
+                    winner=lists[i];
+                    lists[i]=lists[i].next;
+                    val=winner.val;
+                    index=i;
+                }
+
+
             }
+            progress.next=winner;
+            progress=progress.next;
+            if(count==lists.length) break;
+
         }
-        ListNode head= minHeap.poll();
-        if(head!=null && head.next!=null){
-            minHeap.offer(head.next);
-        }
-        ListNode current=head;
-        while (!minHeap.isEmpty()){
-            ListNode poppedNode= minHeap.poll();
-            if(poppedNode.next!=null){
-                minHeap.offer(poppedNode.next);
-            }
-            current.next=poppedNode;
-            current=current.next;
-        }
-        return head;
+        return dummy.next;
+
     }
 
     /*

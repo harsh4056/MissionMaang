@@ -2,32 +2,34 @@ import java.util.Arrays;
 
 public class DecodeWays {
 
+    int ans;
     public int numDecodings(String s) {
-        int[] dp = new int[s.length()+1];
-        Arrays.fill(dp,-1);
-        return decode(s.toCharArray(),0,dp);
-    }
-    public int decode(char[]s, int index, int[] dp){
-        if(index>=s.length) return 1;
-        if(dp[index]!=-1) return dp[index];
-        int total=0;
-        for(int i=index;i<s.length;i++){
-            String temp=new String(s,index,i-index+1);
+        ans=0;
+        getWays(s.toCharArray(),0);
+        return ans;
 
-            int value=Integer.parseInt(temp);
-            if(value>0 &&value<27){
-                total+= decode(s,i+1, dp);
+    }
+
+    public int getWays(char[]cs,int index){
+        if(index==cs.length){
+            return 1;
+        }
+        for(int i=index;i<cs.length;i++){
+            String digit= new String(cs,index,i-index+1);
+            int num=Integer.parseInt(digit);
+            if(num>=1 && num<=26){
+                int temp=   getWays(cs,i+1);
+                ans+=temp;
             }
-            else {
-                total+=0;
+            else{
+                return 0;
             }
         }
-        dp[index]=total;
-        return total;
+        return 0;
     }
 
     public static void main(String[] args) {
         DecodeWays decodeWays= new DecodeWays();
-        System.out.println(decodeWays.numDecodings("2101"));
+        System.out.println(decodeWays.numDecodings("226"));
     }
 }

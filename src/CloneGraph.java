@@ -2,30 +2,34 @@ import java.util.*;
 
 public class CloneGraph {
     public Node cloneGraph(Node node) {
-        if(node==null){
-            return null;
-        }
         HashMap<Node,Node> hashMap= new HashMap<>();
-        dfsStoreHashMap(node,hashMap);
-        Node newNodeRoot= hashMap.get(node);
 
-        for (Map.Entry<Node, Node> nodeNodeEntry : hashMap.entrySet()) {
-            for (Node current : nodeNodeEntry.getKey().neighbors) {
-                nodeNodeEntry.getValue().neighbors.add(hashMap.get(current));
+        HashSet<Node> visited= new HashSet<>();
+        Queue<Node> bfsQueue= new LinkedList<>();
+
+        bfsQueue.offer(node);
+        while(!bfsQueue.isEmpty()){
+            Node curr= bfsQueue.poll();
+            if(visited.contains(curr)) continue;
+            visited.add(curr);
+            if(!hashMap.containsKey(curr)){
+                Node temp= new Node(curr.val);
+                hashMap.put(curr,temp);
             }
+            Node node_dash= hashMap.get(curr);
+            for(Node n:curr.neighbors){
+                if(!visited.contains(n)) {
+                    bfsQueue.offer(n);
+                }
+                hashMap.putIfAbsent(n, new Node(n.val));
+                node_dash.neighbors.add(hashMap.get(n));
+            }
+
+
         }
-        return newNodeRoot;
+        return hashMap.get(node);
     }
 
-    public void dfsStoreHashMap(Node node, HashMap<Node,Node> hashMap){
-        if (!hashMap.containsKey(node)){
-            hashMap.put(node,new Node(node.val));
-            List<Node> nodes= node.neighbors;
-            for (Node current : nodes) {
-                dfsStoreHashMap(current,hashMap);
-            }
-        }
-    }
 
 
 
@@ -40,17 +44,17 @@ public class CloneGraph {
         node1.neighbors.add(node2);
         node1.neighbors.add(node4);
 
-        /*node2.neighbors.add(node1);
+        node2.neighbors.add(node1);
         node2.neighbors.add(node3);
 
         node3.neighbors.add(node2);
         node3.neighbors.add(node4);
 
         node4.neighbors.add(node1);
-        node4.neighbors.add(node3);*/
+        node4.neighbors.add(node3);
 
         CloneGraph sol = new CloneGraph();
-        Node clone = sol.cloneGraph(new Node(1));
+        Node clone = sol.cloneGraph(node1);
 
         printGraph(clone, new HashSet<>());
     }
