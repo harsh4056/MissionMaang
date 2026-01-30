@@ -49,7 +49,7 @@ public class RottingOranges {
     public static void main(String[] args) {
         RottingOranges solution = new RottingOranges();
 
-     /*   int[][] grid1 = {
+        int[][] grid1 = {
                 {2,1,1},
                 {1,1,0},
                 {0,1,1}
@@ -61,7 +61,7 @@ public class RottingOranges {
                 {0,1,1},
                 {1,0,1}
         };
-        System.out.println(solution.orangesRotting(grid2)); // Expected: -1*/
+        System.out.println(solution.orangesRotting(grid2)); // Expected: -1
 
         int[][] grid3 = {
                 {0}

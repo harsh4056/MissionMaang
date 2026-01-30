@@ -3,41 +3,47 @@ import java.util.*;
 public class TaskScheduler {
 
     public int leastInterval(char[] tasks, int n) {
-        int[][]freq= new int[26][2];
-        for(int task:tasks){
-            freq[task-'A'][0]++;
+        int[]freq= new int[26];
+        for (char task : tasks) {
+            freq[task-'A']++;
         }
-        int i;
-        for(i=0;i<100000;i++){
-
-            int winner=Integer.MAX_VALUE;
-            for(int[]f:freq){
-                if(f[0]>0 && f[1]<=i){
-
-                    f[0]--;
-                    f[1]=i+n;
-                    break;
-                }
-                else {
-                    winner=Math.min(winner,f[1]);
-                }
+        PriorityQueue<Integer> minHeap= new PriorityQueue<>((a,b)->{
+            return b-a;
+        });
+        for (int ints : freq) {
+            if(ints>0) {
+                minHeap.offer(ints);
             }
-            if(winner>=i && winner!=Integer.MAX_VALUE)
-             i=winner;
-
-
         }
-        int ans=0;
-        for(int[]f:freq){
-             ans=Math.max(ans,f[1]);
+        int t=0;
+        Queue<int[]> queue= new LinkedList<>();
+        while (!queue.isEmpty()||!minHeap.isEmpty()){
+            if(!minHeap.isEmpty()){
+                int curr=minHeap.poll();
+                curr--;
+                if(curr>0)
+                 queue.offer(new int[]{curr,t+n});
+            }
+            if (!queue.isEmpty() && queue.peek()[1]==t){
+                minHeap.offer(queue.poll()[0]);
 
+            }
+            t++;
         }
-        return ans-1;
+        return t;
     }
+
 
 
     public static void main(String[] args) {
         TaskScheduler scheduler = new TaskScheduler();
+
+
+        // Example 3:
+        char[] tasks3 = {'A','A','A','B','B','B'};
+        int n3 = 3;
+        System.out.println("Output 3: " + scheduler.leastInterval(tasks3, n3));  // Expected Output: 10
+
         // Example 1:
         char[] tasks1 = {'A','A','A','B','B','B'};
         int n1 = 2;
@@ -48,10 +54,6 @@ public class TaskScheduler {
         int n2 = 1;
         System.out.println("Output 2: " + scheduler.leastInterval(tasks2, n2));  // Expected Output: 6
 
-        // Example 3:
-        char[] tasks3 = {'A','A','A','B','B','B'};
-        int n3 = 3;
-        System.out.println("Output 3: " + scheduler.leastInterval(tasks3, n3));  // Expected Output: 10
     }
 
 }

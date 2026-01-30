@@ -1,40 +1,36 @@
 import java.util.*;
 
 public class CourseSchedule {
-    public boolean canFinish(int numCourses, int[][] prerequisites) {
-
-      List<List<Integer>> graph = new ArrayList<>();
-        for (int i = 0; i < numCourses; i++) {
+    public boolean canFinish(int n, int[][] A) {
+        Stack<Integer> stack= new Stack<>();
+        List<List<Integer>> graph= new ArrayList<>();
+        for(int i=0;i<n;i++){
             graph.add(new ArrayList<>());
         }
-      for(int []arr:prerequisites){
-         graph.get(arr[1]).add(arr[0]);
-      }
-      int[]indegree= new int[numCourses];
-        for (int i = 0; i < indegree.length; i++) {
-            for(int vertex:graph.get(i)){
-                indegree[vertex]++;
+
+
+        int[] indegree= new int[n];
+        for(int []edge:A){
+            graph.get(edge[1]).add(edge[0]);
+            indegree[edge[0]]++;
+        }
+        for(int i=0;i<n;i++){
+            if(indegree[i]==0){
+                stack.push(i);
             }
         }
-        Queue<Integer> queue= new ArrayDeque<>();
-        for (int i = 0; i < indegree.length; i++) {
-            if(indegree[i]==0)
-             queue.add(i);
-        }
-
-        int count=0;
-        while (!queue.isEmpty()){
-            int vertex=queue.poll();
-            count++;
-
-
-            for(int neighbour:graph.get(vertex)){
-                indegree[neighbour]--;
-                if(indegree[neighbour]==0) queue.offer(neighbour);
+        List<Integer> list= new ArrayList<>();
+        while(!stack.isEmpty()){
+            int curr=stack.pop();
+            list.add(curr);
+            for(int nei:graph.get(curr)){
+                indegree[nei]--;
+                if(indegree[nei]==0){
+                    stack.push(nei);
+                }
             }
-
         }
-        return count==numCourses;
+        return list.size()==n;
 
 
     }
