@@ -1,36 +1,40 @@
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.PriorityQueue;
 
 public class SwimInRisingWater {
     public int swimInWater(int[][] grid) {
-        PriorityQueue<int[]> minHeap= new PriorityQueue<>(Comparator.comparingInt(a -> a[2]));
-        int n=grid.length;
-        boolean[][]visited= new boolean[n][n];
+       PriorityQueue<int[]> minHeap= new PriorityQueue<>((a,b)->{
+           return a[2]-b[2];
+       });
+       int n= grid.length;
+       int m=grid[0].length;
+       int ans=grid[0][0];
+        HashSet<Integer> visited= new HashSet<>();
         minHeap.offer(new int[]{0,0,grid[0][0]});
-        int max=0;
-        while(!minHeap.isEmpty()){
+        int[][]dirs= new int[][]{{0,1},{1,0},{0,-1},{-1,0}};
+        while (!minHeap.isEmpty()){
+            int[]curr= minHeap.poll();
 
-            int[]curr=minHeap.poll();
-            visited[curr[0]][curr[1]]=true;
-            max=Math.max(curr[2],max);
-            if(curr[0]==n-1 && curr[1]==n-1) break;
+            visited.add(curr[0]*m +curr[1]);
+            ans=Math.max(ans,curr[2]);
+            if(curr[0]==n-1 && curr[1]==m-1) break;
+            for(int[]dir:dirs){
+                int x=dir[0]+curr[0];
+                int y=dir[1]+curr[1];
+                if(x>=0 && x<n && y>=0 && y<m){
+                    int node=(x*m)+y;
+                    if(!visited.contains(node)){
+                        minHeap.offer(new int[]{x,y,grid[x][y]});
+                    }
+                }
+            }
 
-
-            if(curr[0]+1<n && !visited[curr[0]+1][curr[1]]){
-                minHeap.offer(new int[]{curr[0]+1,curr[1],grid[curr[0]+1][curr[1]]});
-            }
-            if(curr[1]+1<n && !visited[curr[0]][curr[1]+1]){
-                minHeap.offer(new int[]{curr[0],curr[1]+1,grid[curr[0]][curr[1]+1]});
-            }
-            if(curr[0]-1>=0 && !visited[curr[0]-1][curr[1]]){
-                minHeap.offer(new int[]{curr[0]-1,curr[1],grid[curr[0]-1][curr[1]]});
-            }
-            if(curr[1]-1>=0 && !visited[curr[0]][curr[1]-1]){
-                minHeap.offer(new int[]{curr[0],curr[1]-1,grid[curr[0]][curr[1]-1]});
-            }
         }
-        return  max;
+
+        return ans;
+
     }
 
     // -------------------------------------------------------------------------
@@ -47,19 +51,17 @@ public class SwimInRisingWater {
         System.out.println();
 
 
-       /* int[][] grid1 = {{0, 1}, {2, 3}};
-        int expected1 = 3;
-        runTest(soln, "Test Case 1 (Simple 2x2)", grid1, expected1);
-
-        int[][] grid2 = {
-                {0, 1, 2, 3, 4},
-                {24, 23, 22, 21, 5},
-                {12, 13, 14, 15, 16},
-                {11, 17, 18, 19, 20},
-                {10, 9, 8, 7, 6}
+        // Test Case 4: Grid where path requires circling back
+        // Expected: 4 (The path must include the cell with elevation 4)
+        int[][] grid4 = {
+                {0,1,2,10},
+                {9,14,4,13},
+                {12,3,8,15},
+                {11,5,7,6}
         };
-        int expected2 = 16;
-        runTest(soln, "Test Case 2 (Standard 5x5)", grid2, expected2);*/
+
+        int expected4 = 8;
+        runTest(soln, "Test Case 4 (Zig-Zag Path)", grid4, expected4);
 
         // Test Case 3: Grid forcing an early high elevation passage
         // Expected: 10 (Must go through '10' at grid[0][1])
@@ -71,15 +73,7 @@ public class SwimInRisingWater {
         int expected3 = 10;
         runTest(soln, "Test Case 3 (Forced High Elevation)", grid3, expected3);
 
-        // Test Case 4: Grid where path requires circling back
-        // Expected: 4 (The path must include the cell with elevation 4)
-        int[][] grid4 = {
-                {0, 3, 4},
-                {1, 2, 5},
-                {6, 7, 8}
-        };
-        int expected4 = 4;
-        runTest(soln, "Test Case 4 (Zig-Zag Path)", grid4, expected4);
+
 
         // Test Case 5: 1x1 grid (Edge Case)
         // Expected: 5

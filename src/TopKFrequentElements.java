@@ -4,29 +4,24 @@ public class TopKFrequentElements {
 
 
     public int[] topKFrequent(int[] nums, int k) {
-        HashMap<Integer,Integer> map= new HashMap<>();
+      PriorityQueue<int[]> maxHeap= new PriorityQueue<>((a,b)->{
+          return b[1]-a[1];
+      });
+      HashMap<Integer,Integer> map = new HashMap<>();
         for (int num : nums) {
             map.putIfAbsent(num,0);
             map.put(num,map.get(num)+1);
         }
-        TreeMap<Integer,ArrayList<Integer>> treeMap= new TreeMap<>();
-
         for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
-            treeMap.putIfAbsent(entry.getValue(), new ArrayList<>());
-            treeMap.get(entry.getValue()).add(entry.getKey());
+           maxHeap.offer(new int[]{entry.getKey(), entry.getValue()});
         }
-        int[] arr= new int[k];
-        k--;
-        int last=treeMap.lastKey();
-         while(k>=0){
-             List<Integer> temp=treeMap.get(last);
-             for (Integer i : temp) {
-                 arr[k--]=i;
-             }
-             if(k>=0)
-              last=treeMap.lowerKey(last);
-         }
-         return arr;
+        int[] ans= new int[k];
+        for(int i=0;i<k;i++){
+            ans[i]=maxHeap.poll()[0];
+        }
+        return ans;
+
+
 
 
     }
