@@ -4,7 +4,7 @@ public class ExcelSheetColumnTitle {
         StringBuilder sb= new StringBuilder();
         while(n>0){
             int rem=n%26;
-
+            rem--;
             sb.append((char)('A'+rem));
             n=n/26;
         }

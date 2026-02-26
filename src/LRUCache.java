@@ -1,24 +1,27 @@
 import java.util.HashMap;
 
 class LRUCache {
-    HashMap<Integer,Dll> map;
-    Dll head,tail;
-    int capacity;
+    Dll head, tail;
+    int size;
+    int curr;
+    HashMap<Integer, Dll> map;
+
     public LRUCache(int capacity) {
-        this.capacity=capacity;
-        head= new Dll(-1001,-1001);
-        tail= new Dll(1001,1001);
-        head.next=tail;
-        tail.prev=head;
-        map= new HashMap<>();
+        head = new Dll(-1001, -1001,null,null);
+        tail = new Dll(-1001, -1001,null,null);
+        head.next = tail;
+        tail.prev = head;
+        size = capacity;
+        curr = 0;
+        map = new HashMap<>();
     }
 
     public int get(int key) {
-        if(map.containsKey(key)){
-           Dll node= map.get(key);
-           detach(node);
-           bringToFront(node);
-           return node.val;
+        if (map.containsKey(key)) {
+            Dll node = map.get(key);
+            detach(node);
+            moveToFront(node);
+            return node.value;
         }
         return -1;
     }
@@ -26,55 +29,51 @@ class LRUCache {
     public void put(int key, int value) {
         if (map.containsKey(key)) {
             Dll node = map.get(key);
-            node.val = value;
-            detach(node);
-            bringToFront(node);
+            node.value = value;
         } else {
-            if (map.size() == capacity) {
-                // 1. Remove from Map
-                map.remove(tail.prev.key);
-                // 2. Remove from DLL
-                removeLast();
+            if (curr == size) {
+                Dll node = tail.prev;
+                detach(node);
+                map.remove(node.key);
+            } else {
+                curr++;
             }
-
-            // 3. Create and add new node
-            Dll nnode = new Dll(key, value);
-            map.put(key, nnode);
-            bringToFront(nnode);
+            Dll node = new Dll(key, value, null, null);
+            moveToFront(node);
         }
+
     }
 
-    public void bringToFront(Dll node){
-        node.next=head.next;
-        node.prev=head;
-        head.next.prev=node;
-        head.next=node;
-    }
-    public void detach(Dll node){
-        Dll back=node.prev;
-        Dll front=node.next;
-        back.next=front;
-        front.prev=back;
-    }
-    public void removeLast(){
-        Dll node = tail.prev;
-        System.out.println("Evicting key: " + node.key); // Add this for debugging
-        detach(node);
+    public void detach(Dll node) {
+        Dll prev = node.prev;
+        Dll next = node.next;
+        prev.next = next;
+        next.prev = prev;
     }
 
+    public void moveToFront(Dll node) {
+        Dll oldFirst = head.next;
+        oldFirst.prev = node;
+        head.next = node;
+        node.prev = head;
+        node.next = oldFirst;
+    }
 
-
-    class Dll{
+    class Dll {
         int key;
-        int val;
+        int value;
         Dll prev;
         Dll next;
 
-        public Dll(int key, int val) {
+        Dll(int key, int value, Dll prev, Dll next) {
             this.key = key;
-            this.val = val;
+            this.value = value;
+            this.prev = prev;
+            this.next = next;
         }
     }
+
+
 
     public static void main(String[] args) {
         LRUCache cache = new LRUCache(3);
