@@ -1,40 +1,57 @@
 public class BestTimeToBuyAndSellStockUsingStrategy {
 
     public long maxProfit(int[] prices, int[] strategy, int k) {
-        long sum=0;
-        int n= prices.length;
-        long[]prefix= new long[n];
-        prefix[0]= (long) prices[0] *strategy[0];
-        for (int i = 1; i < prices.length; i++) {
-            int price = prices[i];
-            prefix[i]=prefix[i-1]+((long) price *strategy[i]);
-        }
+        long sum = 0;
+        long ans = 0;
         for (int i = 0; i < prices.length; i++) {
-            int price = prices[i];
-            int strat=strategy[i];
-            sum+= (long) price *strat;
+            sum += (long) prices[i] * strategy[i];
         }
-        long ssum=0;
-        for(int i=k/2;i<k;i++){
-            ssum+=prices[i];
+        ans = Math.max(ans, sum);
+        for (int i = 0; i < k / 2; i++) {
+            if (strategy[i] == 1) {
+                sum -= prices[i];
+            } else if (strategy[i] == -1) {
+                sum += prices[i];
+            }
         }
-        ssum+=prefix[n-1]-prefix[k-1];
-        sum=Math.max(ssum,sum);
-        ssum=0;
-        for(int i=k;i<n;i++){
-            ssum+= (long) strategy[i - k] *prices[i-k];
-            //ssum-= (long) strategy[i - (k / 2)] *prices[i-(k/2)];
-            ssum+= (long) prices[i];
-            long preSum=prefix[n-1]-prefix[i];
 
-            sum=Math.max(sum,ssum+preSum);
+        for (int i = k / 2; i < k; i++) {
+            if (strategy[i] == -1) {
+                sum += 2L * prices[i];
+            } else if (strategy[i] == 0) {
+                sum += prices[i];
+            }
         }
-        return sum;
+        ans = Math.max(ans, sum);
+
+        for (int i = 1; i < prices.length - k+1; i++) {
+            if (strategy[i-1] == 1) {
+                sum += prices[i-1];
+            } else if (strategy[i-1] == -1) {
+                sum -= prices[i-1];
+            }
+            sum -= prices[i-1 +(k/2)];
+            if (strategy[i + k - 1] == -1) {
+                sum += 2L * prices[i + k - 1];
+            } else if (strategy[i + k - 1] == 0) {
+                sum += prices[i + k - 1];
+            }
+            ans = Math.max(ans, sum);
+        }
+        return ans;
+
     }
 
     public static void main(String[] args) {
         BestTimeToBuyAndSellStockUsingStrategy obj =
                 new BestTimeToBuyAndSellStockUsingStrategy();
+
+        // Test case 3
+        int[] prices3 = {4,7,13};
+        int[] strategy3 = {-1, -1, 0};
+        int k3 = 2;
+        System.out.println(obj.maxProfit(prices3, strategy3, k3));
+        // Expected: 9
 
         // Test case 1 (Example 1)
         int[] prices1 = {4, 2, 8};
@@ -50,12 +67,7 @@ public class BestTimeToBuyAndSellStockUsingStrategy {
         System.out.println(obj.maxProfit(prices2, strategy2, k2));
         // Expected: 9
 
-        // Test case 3
-        int[] prices3 = {4,7,13};
-        int[] strategy3 = {-1, -1, 0};
-        int k3 = 2;
-        System.out.println(obj.maxProfit(prices3, strategy3, k3));
-        // Expected: 23
+
     }
 
 }
