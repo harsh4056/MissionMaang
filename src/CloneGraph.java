@@ -2,32 +2,34 @@ import java.util.*;
 
 public class CloneGraph {
     public Node cloneGraph(Node node) {
-        HashMap<Node,Node> hashMap= new HashMap<>();
-
+        if(node==null) return node;
+        HashMap<Node,Node> map= new HashMap<>();
         HashSet<Node> visited= new HashSet<>();
-        Queue<Node> bfsQueue= new LinkedList<>();
+        Queue<Node> queue= new LinkedList<>();
+        Node root= new Node(node.val);
+        map.put(node,root);
+        queue.offer(node);
+        while(!queue.isEmpty()){
+            Node curr= queue.poll();
+            Node bNode=map.get(curr);
 
-        bfsQueue.offer(node);
-        while(!bfsQueue.isEmpty()){
-            Node curr= bfsQueue.poll();
-            if(visited.contains(curr)) continue;
-            visited.add(curr);
-            if(!hashMap.containsKey(curr)){
-                Node temp= new Node(curr.val);
-                hashMap.put(curr,temp);
-            }
-            Node node_dash= hashMap.get(curr);
-            for(Node n:curr.neighbors){
-                if(!visited.contains(n)) {
-                    bfsQueue.offer(n);
+            for(Node nei:curr.neighbors){
+                if(!map.containsKey(nei)){
+                    Node temp= new Node(nei.val);
+                    map.put(nei,temp);
                 }
-                hashMap.putIfAbsent(n, new Node(n.val));
-                node_dash.neighbors.add(hashMap.get(n));
-            }
 
+                bNode.neighbors.add(map.get(nei));
+                if(!visited.contains(nei)){
+                    queue.offer(nei);
+                }
+            }
+            visited.add(curr);
 
         }
-        return hashMap.get(node);
+        return root;
+
+
     }
 
 
