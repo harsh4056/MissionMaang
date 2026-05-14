@@ -1,32 +1,36 @@
 public class ValidPalindromeII {
 
     public boolean validPalindrome(String s) {
-        int n = s.length();
-        char[] cs = s.toCharArray();
-        int l = 0;
-        int r = n - 1;
-        int count = 0;
-        while (l <= r) {
-            char left=cs[l];
-            char right=cs[r];
-            if (cs[l] != cs[r]) {
-                if (cs[l + 1] == cs[r]) {
-                    l++;
-                    count++;
-                } else if (cs[l] == cs[r - 1]) {
-                    r--;
-                    count++;
-                }
-                else
-                return false;
-            } else {
-                r--;
+        char[]cs=s.toCharArray();
+        int l=0;
+        int r=cs.length-1;
+
+        while(l<r){
+            if(cs[l]==cs[r]){
                 l++;
+                r--;
+            }
+            else{
+                boolean ans=check(l+1,r,cs)|| check(l,r-1,cs);
+                return ans;
+
             }
         }
-        return count <= 1;
+        return true;
+
+
     }
 
+    public boolean check(int l,int r,char[]cs){
+        while(l<r){
+            if(cs[l]==cs[r]){
+                l++;
+                r--;
+            }
+            else return false;
+        }
+        return true;
+    }
     public static void main(String[] args) {
         ValidPalindromeII soln= new ValidPalindromeII();
         System.out.println(soln.validPalindrome("eedede"));

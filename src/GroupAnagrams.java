@@ -31,7 +31,6 @@ public class GroupAnagrams {
                 sNew.append((char) (i + 'a'));
                 alphabet--;
             }
-
         }
         return sNew.toString();
     }
